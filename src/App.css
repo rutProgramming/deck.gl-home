@@ -1,0 +1,77 @@
+#root,
+body,
+html {
+  height: 100vh;
+  width: 100vw;
+}
+
+
+.deckHost {
+  position: absolute;
+  inset: 0;
+}
+
+.list {
+  display: grid;
+  gap: 8px;
+  margin: 10px 0 18px;
+}
+
+.row {
+  text-align: left;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.04);
+  cursor: pointer;
+}
+
+.row.selected {
+  border-color: rgba(0, 122, 255, 0.8);
+  background: rgba(0, 122, 255, 0.12);
+}
+
+.rowTitle {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.rowMeta {
+  display: grid;
+  gap: 2px;
+  opacity: 0.85;
+  font-size: 12px;
+}
+
+.editor {
+  display: grid;
+  gap: 10px;
+}
+
+.editor input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.16);
+  background: rgba(255,255,255,0.06);
+  color: inherit;
+}
+
+.editor button {
+  padding: 10px;
+  border-radius: 10px;
+  border: 0;
+  cursor: pointer;
+}
+
+.readonly {
+  font-size: 12px;
+  opacity: 0.9;
+  display: grid;
+  gap: 6px;
+}
+
+.hint {
+  opacity: 0.8;
+  font-size: 13px;
+}
