@@ -29,7 +29,7 @@ export const PlaneEditor = observer(function PlaneEditor() {
         return (
             <Paper elevation={3} sx={{ p: 2, textAlign: "center" }}>
                 <Typography variant="body1" color="text.secondary">
-                    Click a plane on the map or in the list.
+                    Click a plane on the map.
                 </Typography>
             </Paper>
         );
