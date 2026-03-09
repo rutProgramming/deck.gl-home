@@ -8,4 +8,5 @@ export type Plane = {
   name: string;
   country: string;
   geoLocation: GeoLocation;
+  heading?: number;
 };

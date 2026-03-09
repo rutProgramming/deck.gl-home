@@ -22,12 +22,14 @@ export function normalizePlanes(raw: RawPlane[]): Plane[] {
 
     const name = String(r?.name ?? "Unknown").trim() || "Unknown";
     const country = String(r?.country ?? "Unknown").trim() || "Unknown";
+    const heading = toNum(r?.heading) || 0;
 
     out.push({
       id,
       name,
       country,
       geoLocation: { lat, lon },
+      heading,
     });
   }
 

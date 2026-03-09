@@ -23,6 +23,7 @@ export function makePlanesIconLayer(args: Args) {
       url: iconAtlas,
       width: 64,
       height: 64,
+      anchorX: 32,
       anchorY: 32,
       mask: true,
     }),
@@ -32,7 +33,7 @@ export function makePlanesIconLayer(args: Args) {
       const [r, g, b] = countryToRgb(p.country);
       return p.id === selectedId ? [r, g, b, 255] : [r, g, b, 220];
     },
-
+    getAngle: (p) => p.heading ?? 0,
     onClick: (info) => {
       const p = info.object;
       if (p?.id) onPickPlane(p.id);

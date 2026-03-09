@@ -32,13 +32,13 @@ export class PlanesStore {
     this.selectedPlaneId = this.planesById.has(id) ? id : null;
   }
 
-  updatePlane(id: string, nextName: string,country: string) {
+  updatePlane(id: string, nextName: string) {
     const p = this.planesById.get(id);
     if (!p) return;
 
     const name = nextName.trim() || "Unknown";
     
-    this.planesById.set(id, { ...p, name ,country});
+    this.planesById.set(id, { ...p, name});
   }
 
   get planesArray(): Plane[] {

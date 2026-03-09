@@ -42,7 +42,7 @@ export function useRadarDeck(mapContainerRef: RefObject<HTMLDivElement | null>) 
         map.on("load", () => {
             const deck = new Deck({
                 parent: mapContainerRef.current!,
-                style: { position: 'absolute', top: '0', left: '0', zIndex: '10', pointerEvents: 'none' },
+                style: { position: 'absolute', top: '0', left: '0', zIndex: '10', pointerEvents: 'auto' },
                 initialViewState: INITIAL_VIEW_STATE,
                 controller: true,
                 onViewStateChange: ({ viewState }) => {

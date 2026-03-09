@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { PlaneEditor } from "../PlaneEditor/PlaneEditor";
 import { useRadarDeck } from "./useRadarDeck";
 import { PlanesPanel } from "../PlanesPanel/PlanesPanel";
+import { Box } from "@mui/material";
 
 // export function RadarMap() {
 //   const mapContainerRef = useRef<HTMLDivElement | null>(null);
@@ -25,13 +26,13 @@ export function RadarMap() {
   useRadarDeck(mapContainerRef);
 
   return (
-    <div style={{ width: "100vw", height: "100vh", position: "relative" }}>
-      <div
+    <Box style={{ width: "100vw", height: "100vh", position: "relative" }}>
+      <Box
         ref={mapContainerRef}
         style={{ width: "100%", height: "100%" }}
       />
 
-      <div
+      <Box
         style={{
           position: "absolute",
           top: 16,
@@ -40,10 +41,10 @@ export function RadarMap() {
         }}
       >
         <PlaneEditor />
-      </div>
+      </Box>
 
 
-       <div
+       <Box
         style={{
           position: "absolute",
           bottom: 16,
@@ -52,8 +53,8 @@ export function RadarMap() {
         }}
       >
         <PlanesPanel />
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }
 
