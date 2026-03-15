@@ -5,89 +5,141 @@ import { planesStore } from "../../store/planes.store";
 import { makePlanesIconLayer } from "../../layers/planesIconLayer";
 import plane from "../../assets/PM.png";
 import { Deck } from "@deck.gl/core";
+import { queryViewport } from "../../services/workerClient";
 
 const INITIAL_VIEW_STATE = {
-    longitude: 34.85,
-    latitude: 31.95,
-    zoom: 6,
-    bearing: 0,
-    pitch: 0,
+  longitude: 34.85,
+  latitude: 31.95,
+  zoom: 6,
+  bearing: 0,
+  pitch: 0,
 };
 
-
 export function useRadarDeck(mapContainerRef: RefObject<HTMLDivElement | null>) {
-    const mapRef = useRef<Map | null>(null);
-    const deckRef = useRef<Deck | null>(null);
-    const disposeReactionRef = useRef<null | (() => void)>(null);
+  const mapRef = useRef<Map | null>(null);
+  const deckRef = useRef<Deck | null>(null);
+  const disposeLayerReactionRef = useRef<null | (() => void)>(null);
+  const disposeFlyToRef = useRef<null | (() => void)>(null);
 
-    useEffect(() => {
-        if (!mapContainerRef.current) return;
+  useEffect(() => {
+    if (!mapContainerRef.current) return;
 
-        const map = new maplibregl.Map({
-            container: mapContainerRef.current,
-            style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${import.meta.env.VITE_REACT_KEY}`,
-            center: [34.85, 31.95],
-            zoom: 6,
-            pitch: 0,
+    const map = new maplibregl.Map({
+      container: mapContainerRef.current,
+      style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${import.meta.env.VITE_REACT_KEY}`,
+      center: [INITIAL_VIEW_STATE.longitude, INITIAL_VIEW_STATE.latitude],
+      zoom: INITIAL_VIEW_STATE.zoom,
+      pitch: 0,
+      maxPitch: 0,
+    });
+
+    mapRef.current = map;
+
+    const resizeObserver = new ResizeObserver(() => map.resize());
+    resizeObserver.observe(mapContainerRef.current);
+
+    map.on("load", () => {
+
+      const deck = new Deck({
+        parent: mapContainerRef.current!,
+        style: {
+          position: "absolute",
+          top: "0",
+          left: "0",
+          zIndex: "10",
+          pointerEvents: "none",
+        },
+        initialViewState: INITIAL_VIEW_STATE,
+        controller: false,
+        layers: [],
+      });
+
+      deckRef.current = deck;
+
+      const syncDeckCamera = () => {
+        const c = map.getCenter();
+        deck.setProps({
+          viewState: {
+            longitude: c.lng,
+            latitude: c.lat,
+            zoom: map.getZoom(),
+            bearing: map.getBearing(),
+            pitch: map.getPitch(),
+          },
         });
+      };
 
-        mapRef.current = map;
+      map.on("move", syncDeckCamera);
+      syncDeckCamera();
 
-        const resizeObserver = new ResizeObserver(() => {
-            map.resize();
+      const sendViewportQuery = () => {
+        const b = map.getBounds();
+        queryViewport({
+          west: b.getWest(),
+          east: b.getEast(),
+          north: b.getNorth(),
+          south: b.getSouth(),
         });
+      };
 
-        resizeObserver.observe(mapContainerRef.current);
+      sendViewportQuery();
+      map.on("moveend", sendViewportQuery);
 
-        map.on("load", () => {
-            const deck = new Deck({
-                parent: mapContainerRef.current!,
-                style: { position: 'absolute', top: '0', left: '0', zIndex: '10', pointerEvents: 'auto' },
-                initialViewState: INITIAL_VIEW_STATE,
-                controller: true,
-                onViewStateChange: ({ viewState }) => {
-                    map.jumpTo({
-                        center: [viewState.longitude, viewState.latitude],
-                        zoom: viewState.zoom,
-                        bearing: viewState.bearing,
-                        pitch: viewState.pitch
-                    });
-                },
-                layers: [],
-            });
+      disposeFlyToRef.current = reaction(
+        () => planesStore.selectedPlane,
+        (selected) => {
+          if (!selected) return;
 
-            deckRef.current = deck;
-            disposeReactionRef.current = reaction(
-                () => ({
-                    planes: planesStore.planesArray,
-                    selectedId: planesStore.selectedPlaneId,
-                }),
-                ({ planes, selectedId }) => {
-                    const layer = makePlanesIconLayer({
-                        data: planes,
-                        selectedId,
-                        iconAtlas: plane,
-                        onPickPlane: (id) => planesStore.selectPlane(id),
-                    });
+          const { lat, lon } = selected.geoLocation;
+          const b = map.getBounds();
 
-                    deck.setProps({ layers: [layer] });
-                },
-                { fireImmediately: true }
-            );
-        });
+          const alreadyVisible =
+            lon >= b.getWest() &&
+            lon <= b.getEast() &&
+            lat >= b.getSouth() &&
+            lat <= b.getNorth();
 
-        return () => {
-            disposeReactionRef.current?.();
-            disposeReactionRef.current = null;
+          if (alreadyVisible) return;
 
-            deckRef.current?.finalize();
-            deckRef.current = null;
+          map.flyTo({
+            center: [lon, lat],
+            zoom: Math.max(map.getZoom(), 8),
+            duration: 800,
+          });
+        }
+      );
 
-            map.remove();
-            mapRef.current = null;
-            resizeObserver.disconnect();
-        };
-    }, [mapContainerRef]);
+      disposeLayerReactionRef.current = reaction(
+        () => ({
+          planes: planesStore.visiblePlanes,
+          selectedId: planesStore.selectedPlaneId,
+        }),
+        ({ planes, selectedId }) => {
+          const layer = makePlanesIconLayer({
+            data: planes,
+            selectedId,
+            iconAtlas: plane,
+            onPickPlane: (id) => planesStore.selectPlane(id),
+          });
+          deck.setProps({ layers: [layer] });
+        },
+        { fireImmediately: true }
+      );
+    });
 
+    return () => {
+      disposeLayerReactionRef.current?.();
+      disposeLayerReactionRef.current = null;
 
+      disposeFlyToRef.current?.();
+      disposeFlyToRef.current = null;
+
+      deckRef.current?.finalize();
+      deckRef.current = null;
+
+      map.remove();
+      mapRef.current = null;
+      resizeObserver.disconnect();
+    };
+  }, [mapContainerRef]);
 }

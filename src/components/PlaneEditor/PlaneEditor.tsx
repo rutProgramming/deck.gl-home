@@ -9,6 +9,7 @@ import {
     Paper,
     Divider
 } from "@mui/material";
+import { renamePlane } from "../../services/workerClient";
 
 export const PlaneEditor = observer(function PlaneEditor() {
     const selected = planesStore.selectedPlane;
@@ -17,12 +18,12 @@ export const PlaneEditor = observer(function PlaneEditor() {
 
     useEffect(() => {
         setNameDraft(selected?.name ?? "");
-    }, [selected?.id]);
+    }, [selected?.id,selected?.name]);
 
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!selected) return;
-        planesStore.updatePlane(selected.id, nameDraft);
+        renamePlane(selected.id, nameDraft);
     };
 
     if (!selected) {
@@ -65,7 +66,7 @@ export const PlaneEditor = observer(function PlaneEditor() {
                     <Typography variant="body2" gutterBottom>
                         Longitude {selected.geoLocation.lon}
                     </Typography>
-                    
+
                 </Box>
 
                 <Button type="submit" variant="contained" fullWidth>

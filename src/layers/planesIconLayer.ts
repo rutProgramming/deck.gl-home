@@ -11,7 +11,9 @@ type Args = {
 };
 
 export function makePlanesIconLayer(args: Args) {
+
   const { data, selectedId, iconAtlas, onPickPlane } = args;
+   console.log('data',data);
 
   return new IconLayer<Plane>({
     id: args.id ?? "planes-icon-layer",
@@ -27,13 +29,18 @@ export function makePlanesIconLayer(args: Args) {
       anchorY: 32,
       mask: true,
     }),
+
     getPosition: (p) => [p.geoLocation.lon, p.geoLocation.lat],
     getSize: (p) => (p.id === selectedId ? 38 : 28),
+    updateTriggers: {
+      getSize: [selectedId],
+    },
     getColor: (p) => {
       const [r, g, b] = countryToRgb(p.country);
       return p.id === selectedId ? [r, g, b, 255] : [r, g, b, 220];
     },
-    getAngle: (p) => p.heading ?? 0,
+   
+    getAngle: (p) => 45 - (p.heading ?? 0),
     onClick: (info) => {
       const p = info.object;
       if (p?.id) onPickPlane(p.id);
