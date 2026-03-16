@@ -13,7 +13,6 @@ type Args = {
 export function makePlanesIconLayer(args: Args) {
 
   const { data, selectedId, iconAtlas, onPickPlane } = args;
-   console.log('data',data);
 
   return new IconLayer<Plane>({
     id: args.id ?? "planes-icon-layer",
