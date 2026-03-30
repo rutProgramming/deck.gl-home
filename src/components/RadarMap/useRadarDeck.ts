@@ -5,7 +5,7 @@ import { planesStore } from "../../store/planes.store";
 import { makePlanesIconLayer } from "../../layers/planesIconLayer";
 import plane from "../../assets/PM.png";
 import { Deck } from "@deck.gl/core";
-import { queryViewport } from "../../services/workerClient";
+import { getVisiblePlanes } from "../../services/workerClient";
 
 const INITIAL_VIEW_STATE = {
   longitude: 34.85,
@@ -74,7 +74,7 @@ export function useRadarDeck(mapContainerRef: RefObject<HTMLDivElement | null>) 
 
       const sendViewportQuery = () => {
         const b = map.getBounds();
-        queryViewport({
+        getVisiblePlanes({
           west: b.getWest(),
           east: b.getEast(),
           north: b.getNorth(),

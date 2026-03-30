@@ -12,21 +12,21 @@ import {
 import { renamePlane } from "../../services/workerClient";
 
 export const PlaneEditor = observer(function PlaneEditor() {
-    const selected = planesStore.selectedPlane;
+    const selectedPlane = planesStore.selectedPlane;
 
-    const [nameDraft, setNameDraft] = useState("");
+    const [editName, setEditName] = useState("");
 
     useEffect(() => {
-        setNameDraft(selected?.name ?? "");
-    }, [selected?.id,selected?.name]);
+        setEditName(selectedPlane?.name ?? "");
+    }, [selectedPlane?.id,selectedPlane?.name]);
 
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (!selected) return;
-        renamePlane(selected.id, nameDraft);
+        if (!selectedPlane) return;
+        renamePlane(selectedPlane.id, editName);
     };
 
-    if (!selected) {
+    if (!selectedPlane) {
         return (
             <Paper elevation={3} sx={{ p: 2, textAlign: "center" }}>
                 <Typography variant="body1" color="text.secondary">
@@ -45,8 +45,8 @@ export const PlaneEditor = observer(function PlaneEditor() {
             <Box component="form" onSubmit={onSubmit} sx={{ mt: 1 }}>
                 <TextField
                     label="Plane Name"
-                    value={nameDraft}
-                    onChange={(e) => setNameDraft(e.target.value)}
+                    value={editName}
+                    onChange={(e) => setEditName(e.target.value)}
                     fullWidth
                     margin="normal"
                 />
@@ -55,16 +55,16 @@ export const PlaneEditor = observer(function PlaneEditor() {
 
                 <Box sx={{ mb: 2 }}>
                     <Typography variant="body2" gutterBottom>
-                        Country of Origin {selected.country}
+                        Country of Origin {selectedPlane.country}
                     </Typography>
                     <Typography variant="body2" gutterBottom>
-                        Heading {selected.heading}
+                        Heading {selectedPlane.heading}
                     </Typography>
                     <Typography variant="body2" gutterBottom>
-                        Latitude {selected.geoLocation.lat}
+                        Latitude {selectedPlane.geoLocation.lat}
                     </Typography>
                     <Typography variant="body2" gutterBottom>
-                        Longitude {selected.geoLocation.lon}
+                        Longitude {selectedPlane.geoLocation.lon}
                     </Typography>
 
                 </Box>

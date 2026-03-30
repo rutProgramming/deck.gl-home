@@ -10,6 +10,14 @@ type Args = {
   onPickPlane: (id: string) => void;
 };
 
+const SELECTED_PLANE_ALPHA = 255;
+const DEFAULT_PLANE_ALPHA = 220;
+const SELECTED_PLANE_SIZE = 38;
+const UNSELECTED_PLANE_SIZE = 28;
+const ROTATION_CORRECTION_PLANE=45
+const ICON_SIZE = 64;
+const ICON_ANCHOR = 32;
+
 export function makePlanesIconLayer(args: Args) {
 
   const { data, selectedId, iconAtlas, onPickPlane } = args;
@@ -22,24 +30,27 @@ export function makePlanesIconLayer(args: Args) {
 
     getIcon: () => ({
       url: iconAtlas,
-      width: 64,
-      height: 64,
-      anchorX: 32,
-      anchorY: 32,
+      width: ICON_SIZE,
+      height: ICON_SIZE,
+      anchorX: ICON_ANCHOR,
+      anchorY: ICON_ANCHOR,
       mask: true,
     }),
 
     getPosition: (p) => [p.geoLocation.lon, p.geoLocation.lat],
-    getSize: (p) => (p.id === selectedId ? 38 : 28),
+    getSize: (p) => (p.id === selectedId ? SELECTED_PLANE_SIZE : UNSELECTED_PLANE_SIZE),
     updateTriggers: {
       getSize: [selectedId],
     },
     getColor: (p) => {
       const [r, g, b] = countryToRgb(p.country);
-      return p.id === selectedId ? [r, g, b, 255] : [r, g, b, 220];
+
+      return p.id === selectedId
+        ? [r, g, b, SELECTED_PLANE_ALPHA]
+        : [r, g, b, DEFAULT_PLANE_ALPHA];
     },
-   
-    getAngle: (p) => 45 - (p.heading ?? 0),
+
+    getAngle: (p) => ROTATION_CORRECTION_PLANE - (p.heading ?? 0),
     onClick: (info) => {
       const p = info.object;
       if (p?.id) onPickPlane(p.id);

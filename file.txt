@@ -1,0 +1,49 @@
+1.normalizePlanes renaame out and change the name of the function-v
+2. worker for (const port of ports) { change to function. review the  code and check duplicaation-v
+
+3. worker 
+case "QUERY_VIEWPORT":
+        lastBbox = msg.bbox
+        const visible = queryViewport(msg.bbox)
+        port.postMessage({ type: "VISIBLE_PLANES", planes: visible })
+        break
+change the name
+-v
+
+4.worker
+  if (
+      plane.geoLocation.lon >= bbox.west &&
+      plane.geoLocation.lon <= bbox.east &&
+      plane.geoLocation.lat >= bbox.south &&
+      plane.geoLocation.lat <= bbox.north
+    ) {
+      result.push(plane)
+    }
+remove to function-v
+
+{
+5. worker - divide the file into classes . soc . Solid
+6.singlton
+
+7. 91 use radar remove to function
+8. change the useradardeck to abstract name in all file.
+9.abstact away the  deck
+}
+
+
+10.PlaneEditor change the name of selected and namedraft-v
+11.iconlayer 
+ getColor: (p) => {
+      const [r, g, b] = countryToRgb(p.country);
+      return p.id === selectedId ? [r, g, b, 255] : [r, g, b, 220];
+    }, 
+    move to const and check the goal-v
+
+12.store
+check in the contructor what the porpose
+remove to function 
+if (this.selectedPlaneId &&
+        !planes.some(p => p.id === this.selectedPlaneId)) {
+      this.selectedPlaneId = null;
+    }
+  }-V

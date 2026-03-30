@@ -19,9 +19,9 @@ export function ingestPlanes(planes: Plane[]) {
   })
 }
 
-export function queryViewport(bbox: BBox) {
+export function getVisiblePlanes(bbox: BBox) {
   worker.port.postMessage({
-    type: "QUERY_VIEWPORT",
+    type: "GET_VISIBLE_PLANES",
     bbox
   })
 }

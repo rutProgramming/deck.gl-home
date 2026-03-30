@@ -5,7 +5,7 @@ import { RadarMap } from './components/RadarMap/RadarMap';
 import { useEffect } from 'react';
 import { ingestPlanes } from './services/workerClient';
 import planesData from './data/sample_planes_with_heading.json';
-import { normalizePlanes } from './domain/plane.normalize';
+import { buildValidPlanesList } from './domain/plane.normalize';
 
 const darkTheme = createTheme({
   palette: {
@@ -15,7 +15,7 @@ const darkTheme = createTheme({
 
 export  function App() {
   useEffect(() => {
-  ingestPlanes(normalizePlanes(planesData))
+  ingestPlanes(buildValidPlanesList(planesData))
 }, [])
   return (
     <ThemeProvider theme={darkTheme}>

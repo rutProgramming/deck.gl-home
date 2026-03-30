@@ -7,24 +7,24 @@ function toNum(v: any): number {
   return Number.isFinite(n) ? n : NaN;
 }
 
-export function normalizePlanes(raw: RawPlane[]): Plane[] {
+export function buildValidPlanesList(raw: RawPlane[]): Plane[] {
   if (!Array.isArray(raw)) return [];
 
-  const out: Plane[] = [];
+  const planes: Plane[] = [];
 
-  for (const r of raw) {
-    const id = String(r?.id ?? "").trim();
+  for (const rawPlane  of raw) {
+    const id = String(rawPlane?.id ?? "").trim();
     if (!id) continue;
 
-    const lat = toNum(r?.geoLocation?.lat);
-    const lon = toNum(r?.geoLocation?.lon);
+    const lat = toNum(rawPlane?.geoLocation?.lat);
+    const lon = toNum(rawPlane?.geoLocation?.lon);
     if (!Number.isFinite(lat) || !Number.isFinite(lon)) continue;
 
-    const name = String(r?.name ?? "Unknown").trim() || "Unknown";
-    const country = String(r?.country ?? "Unknown").trim() || "Unknown";
-    const heading = toNum(r?.heading) || 0;
+    const name = String(rawPlane?.name ?? "Unknown").trim() || "Unknown";
+    const country = String(rawPlane?.country ?? "Unknown").trim() || "Unknown";
+    const heading = toNum(rawPlane?.heading) || 0;
 
-    out.push({
+    planes.push({
       id,
       name,
       country,
@@ -33,5 +33,5 @@ export function normalizePlanes(raw: RawPlane[]): Plane[] {
     });
   }
 
-  return out;
+  return planes;
 }

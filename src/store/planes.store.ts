@@ -10,17 +10,21 @@ export class PlanesStore {
     makeAutoObservable(this, {}, { autoBind: true });
   }
 
-   setVisiblePlanes(planes: Plane[]) {
+  setVisiblePlanes(planes: Plane[]) {
     this.visiblePlanes = planes;
   }
 
+  private clearSelectedPlaneIfMissing(planes: Plane[]) {
+  if (
+    this.selectedPlaneId &&
+    !planes.some(p => p.id === this.selectedPlaneId)
+  ) {
+    this.selectedPlaneId = null;
+  }
+}
   setAllPlanes(planes: Plane[]) {    
     this.allPlanes = planes;
-
-    if (this.selectedPlaneId &&
-        !planes.some(p => p.id === this.selectedPlaneId)) {
-      this.selectedPlaneId = null;
-    }
+    this.clearSelectedPlaneIfMissing(planes);
   }
 
   selectPlane(id: string | null) {
