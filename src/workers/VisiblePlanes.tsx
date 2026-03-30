@@ -1,5 +1,4 @@
 import type { Plane } from "../domain/plane.types";
-import type { IPlaneWorker } from "./PlaneWorker";
 import type { BBox } from "./worker.types";
 
 export interface IVisiblePlanes {

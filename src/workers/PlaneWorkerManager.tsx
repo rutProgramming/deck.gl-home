@@ -24,7 +24,7 @@ export class PlaneWorkerManager implements IPlaneWorkerManager {
         this.#planeWorker = planeWorker
     }
 
-    static getInstance(
+    static init(
         visiblePlanes: IVisiblePlanes,
         broadcastPlains: IBroadcastPlains,
         planeWorker: IPlaneWorker
@@ -35,6 +35,13 @@ export class PlaneWorkerManager implements IPlaneWorkerManager {
                 broadcastPlains,
                 planeWorker
             )
+        }
+        return PlaneWorkerManager._instance
+    }
+
+    static getInstance() {
+        if (!PlaneWorkerManager._instance) {
+            throw new Error("PlaneWorkerManager.init() must be called first")
         }
         return PlaneWorkerManager._instance
     }
