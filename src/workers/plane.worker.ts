@@ -17,6 +17,6 @@ const planeWorkerManager = PlaneWorkerManager.getInstance(visiblePlanes, broadca
 self.onconnect = (event: MessageEvent) => {
   const port = event.ports[0]
   broadcastPlains.addPort(port)
-  port.start()
+  // port.start()
   port.onmessage = (e: MessageEvent<Message>) => planeWorkerManager.handleMessage(e.data)
 }

@@ -3,13 +3,13 @@ import type { Plane } from "../domain/plane.types"
 export interface IBroadcastPlains {
     postMessageToAllPorts(type: string, planes: Plane[]): void
     broadcastAllPlanes(planesById: Map<string, Plane>): void
-    broadcastVisiblePlanes(visiblePlanes:Plane[]): void
+    broadcastVisiblePlanes(visiblePlanes: Plane[]): void
 }
 export class BroadcastPlains implements IBroadcastPlains {
 
     #ports: MessagePort[] = []
     private static _instance: BroadcastPlains
-    private constructor() {}
+    private constructor() { }
 
     static getInstance() {
         if (!BroadcastPlains._instance) {
@@ -18,10 +18,12 @@ export class BroadcastPlains implements IBroadcastPlains {
         return BroadcastPlains._instance
     }
     addPort(port: MessagePort) {
-        this.#ports.push(port)
-        port.start()
+        if (!this.#ports.includes(port)) {
+            port.start()
+            this.#ports.push(port)
+        }
     }
-    
+
 
     postMessageToAllPorts(type: string, planes: Plane[]) {
         for (const port of this.#ports) {
@@ -33,7 +35,7 @@ export class BroadcastPlains implements IBroadcastPlains {
         this.postMessageToAllPorts("ALL_PLANES", planes)
     }
 
-    broadcastVisiblePlanes(visiblePlanes:Plane[]): void {
+    broadcastVisiblePlanes(visiblePlanes: Plane[]): void {
         this.postMessageToAllPorts("VISIBLE_PLANES", visiblePlanes)
     }
 

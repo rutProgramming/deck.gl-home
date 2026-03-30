@@ -8,7 +8,7 @@ export interface IPlaneWorker {
 export class PlaneWorker implements IPlaneWorker {
     #planesById = new Map<string, Plane>()
     private static _instance: PlaneWorker
-    private constructor() {}
+    private constructor() { }
 
     static getInstance() {
         if (!PlaneWorker._instance) PlaneWorker._instance = new PlaneWorker()
@@ -26,7 +26,7 @@ export class PlaneWorker implements IPlaneWorker {
         }
     }
     getPlanesById(): Map<string, Plane> {
-        return this.#planesById
+        return new Map(this.#planesById)
     }
 
 }
