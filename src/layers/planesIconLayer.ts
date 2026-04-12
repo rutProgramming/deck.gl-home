@@ -2,7 +2,7 @@ import { IconLayer } from "@deck.gl/layers";
 import type { Plane } from "../domain/plane.types";
 import { countryToRgb } from "../domain/plane.color";
 
-type Args = {
+export type PlanesIconLayer = {
   id?: string;
   data: Plane[];
   selectedId: string | null;
@@ -18,10 +18,10 @@ const ROTATION_CORRECTION_PLANE=45
 const ICON_SIZE = 64;
 const ICON_ANCHOR = 32;
 
-export function makePlanesIconLayer(args: Args) {
-
+export function makePlanesIconLayer(args: PlanesIconLayer) {
+  
   const { data, selectedId, iconAtlas, onPickPlane } = args;
-
+  
   return new IconLayer<Plane>({
     id: args.id ?? "planes-icon-layer",
     data,

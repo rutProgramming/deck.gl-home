@@ -1,7 +1,5 @@
-import type { IconLayer } from "@deck.gl/layers"
-import type { RefObject } from "react"
-import type { Plane } from "../../domain/plane.types"
-
+import type { Plane } from "../../domain/plane.types";
+import type { IconLayer } from "@deck.gl/layers";
 export type ViewState = {
     longitude: number,
     latitude: number,
@@ -10,16 +8,9 @@ export type ViewState = {
     pitch: number,
 }
 
-export type Props = {
-    parent: RefObject<HTMLDivElement | null>,
-    style: {
-        position: string,
-        top: string,
-        left: string,
-        zIndex: string,
-        pointerEvents: string,
-    },
-    viewState: ViewState,
-    controller: false,
-    layers: [IconLayer<Plane, {}>],
-}
+
+export type PlaneLayerFactory = (options: {
+    data: Plane[];
+    selectedId: string | null;
+    onPickPlane: (id: string) => void;
+}) => IconLayer<Plane, {}>;

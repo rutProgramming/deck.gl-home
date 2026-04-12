@@ -11,7 +11,7 @@ export class PlanesStore {
   }
 
   setVisiblePlanes(planes: Plane[]) {
-    this.visiblePlanes = planes;
+    this.visiblePlanes = planes;    
   }
 
   private clearSelectedPlaneIfMissing(planes: Plane[]) {

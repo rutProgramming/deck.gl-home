@@ -1,22 +1,22 @@
 import { Deck } from "@deck.gl/core";
-import type { RefObject } from "react";
-import type { Props, ViewState } from "./RadarMap.type";
-import type { IconLayer } from "@deck.gl/layers";
+import type { ViewState } from "./RadarMap.type";
+import type { IRadarLayer } from "./IRadarLayer";
 import type { Plane } from "../../domain/plane.types";
-import type { IRadarMap } from "./IRadarMap";
+import type { PlaneLayerFactory } from "./RadarMap.type";
 
+export class RadarDeck implements IRadarLayer {
+    private deck?: Deck;
+    private readonly onPlaneClick: (id: string) => void;
+    private readonly makeLayer: PlaneLayerFactory;
 
-
-export class RadarDeck implements IRadarMap{
-    
-    deck?: Deck
-    constructor(mapContainerRef: RefObject<HTMLDivElement | null>, initialViewState: ViewState) {
-        this.createLayer(mapContainerRef, initialViewState)
+    constructor(onPlaneClick: (id: string) => void, makeLayer: PlaneLayerFactory) {        
+        this.onPlaneClick = onPlaneClick;
+        this.makeLayer = makeLayer;
     }
 
-    createLayer(mapContainerRef: RefObject<HTMLDivElement | null>, initialViewState: ViewState) {
+    attach(container: HTMLDivElement): void {
         this.deck = new Deck({
-            parent: mapContainerRef.current!,
+            parent: container,
             style: {
                 position: "absolute",
                 top: "0",
@@ -24,38 +24,21 @@ export class RadarDeck implements IRadarMap{
                 zIndex: "10",
                 pointerEvents: "none",
             },
-            initialViewState: initialViewState,
             controller: false,
             layers: [],
         });
-
     }
 
-    setLayerProps(propName: 'viewState' | 'layers', props: Partial<Props>) {
-        switch (propName) {
-            case 'viewState':
-                if ('viewState' in props && props.viewState)
-                    this.#SetLayerViewState(props.viewState)
-                break;
-            case 'layers':
-                if ('layers' in props && props.layers)
-                    this.#SetLayerLayers(props.layers)
-                break;
-        }
-    }
-    #SetLayerViewState(viewState: ViewState) {
-        this.deck?.setProps({
-            viewState
-        });
+    setViewState(viewState: ViewState): void {
+        this.deck?.setProps({ viewState });
     }
 
-    #SetLayerLayers(layers: [IconLayer<Plane, {}>]) {
-        this.deck?.setProps({
-            layers
-        });
-
+    renderPlanes(planes: Plane[], selectedId: string | null): void {
+        const layer = this.makeLayer({ data: planes, selectedId, onPickPlane: this.onPlaneClick });
+        this.deck?.setProps({ layers: [layer] });
     }
-    finalize() {
-        this.deck?.finalize()
+
+    finalize(): void {
+        this.deck?.finalize();
     }
 }

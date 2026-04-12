@@ -52,7 +52,6 @@ export class PlaneWorkerManager implements IPlaneWorkerManager {
     }
 
     handleMessage(msg: Message) {
-
         switch (msg.type) {
             case "INGEST_PLANES":
 
