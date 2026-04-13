@@ -2,33 +2,24 @@ import { useRef } from "react";
 import { Box } from "@mui/material";
 import { PlaneEditor } from "../PlaneEditor/PlaneEditor";
 import { PlanesPanel } from "../PlanesPanel/PlanesPanel";
-import { useRadarMap } from "./useRadarMap";
+import { useMap } from "./useMap";
 import { planesStore } from "../../store/planes.store";
-import { getVisiblePlanes } from "../../services/workerClient";
-import { RadarDeck } from "./RadarDeck";
+import { DeckMapDrawer } from "./DeckMapDrawer";
 import { makePlanesIconLayer } from "../../layers/planesIconLayer";
 import plane from "../../assets/PM.png";
+import type { Plane } from "../../domain/plane.types";
 
-const INITIAL_VIEW_STATE = {
-    longitude: 34.85, 
-    latitude: 31.95,
-    zoom: 6,
-    bearing: 0, 
-    pitch: 0,
-};
+ 
 
-export function RadarMap() {
+export function Map() {
     const mapContainerRef = useRef<HTMLDivElement | null>(null);
 
-    useRadarMap(mapContainerRef, {
-        initialViewState: INITIAL_VIEW_STATE,
-        createLayer: () => new RadarDeck(
+    useMap(mapContainerRef, {
+        createLayer: () => new DeckMapDrawer<Plane>(
             (id) => planesStore.selectPlane(id),
             ({ data, selectedId, onPickPlane }) =>
                 makePlanesIconLayer({ data, selectedId, iconAtlas: plane, onPickPlane })
-        ),
-        getVisiblePlanes,
-        store: planesStore,
+        )
     });
 
     return (

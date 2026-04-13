@@ -9,8 +9,8 @@ export type ViewState = {
 }
 
 
-export type PlaneLayerFactory = (options: {
-    data: Plane[];
+export type ItemLayerFactory<T> = (options: {
+    data: T[];
     selectedId: string | null;
     onPickPlane: (id: string) => void;
 }) => IconLayer<Plane, {}>;

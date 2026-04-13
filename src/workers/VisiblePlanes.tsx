@@ -2,7 +2,7 @@ import type { Plane } from "../domain/plane.types";
 import type { BBox } from "./worker.types";
 
 export interface IVisiblePlanes {
-    getPlanesInViewport(bbox: BBox, planesById: Map<string, Plane>): Plane[]
+    getPlanesInBBox(bbox: BBox, planesById: Map<string, Plane>): Plane[]
 }
 
 export class VisiblePlanes implements IVisiblePlanes {
@@ -15,7 +15,7 @@ export class VisiblePlanes implements IVisiblePlanes {
             plane.geoLocation.lat <= bbox.north
         )
     }
-    getPlanesInViewport(bbox: BBox, planesById: Map<string, Plane>): Plane[] {
+    getPlanesInBBox(bbox: BBox, planesById: Map<string, Plane>): Plane[] {
         const result: Plane[] = []
         for (const plane of planesById.values()) {
             if (this.#checkPlaneInBBox(plane, bbox)) {

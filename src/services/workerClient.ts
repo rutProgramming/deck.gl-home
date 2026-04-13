@@ -19,9 +19,9 @@ export function ingestPlanes(planes: Plane[]) {
   })
 }
 
-export function getVisiblePlanes(bbox: BBox) {
+export function requestVisiblePlanes(bbox: BBox) {
   worker.port.postMessage({
-    type: "GET_VISIBLE_PLANES",
+    type: "REQUEST_VISIBLE_PLANES",
     bbox
   })
 }

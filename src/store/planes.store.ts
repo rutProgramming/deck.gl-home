@@ -2,7 +2,7 @@ import { makeAutoObservable } from "mobx";
 import type { Plane } from "../domain/plane.types";
 
 export class PlanesStore {
-  allPlanes: Plane[] = [];
+  allPlanesById = new Map<string, Plane>()
   visiblePlanes: Plane[] = [];
   selectedPlaneId: string | null = null;
 
@@ -11,20 +11,21 @@ export class PlanesStore {
   }
 
   setVisiblePlanes(planes: Plane[]) {
-    this.visiblePlanes = planes;    
+    this.visiblePlanes = planes;
   }
 
-  private clearSelectedPlaneIfMissing(planes: Plane[]) {
-  if (
-    this.selectedPlaneId &&
-    !planes.some(p => p.id === this.selectedPlaneId)
-  ) {
-    this.selectedPlaneId = null;
+  private clearSelectedPlaneIfMissing() {
+    if (
+      this.selectedPlaneId &&
+      !this.allPlanesById.has(this.selectedPlaneId)
+    ) {
+      this.selectedPlaneId = null;
+    }
   }
-}
-  setAllPlanes(planes: Plane[]) {    
-    this.allPlanes = planes;
-    this.clearSelectedPlaneIfMissing(planes);
+  setAllPlanes(planes: Plane[]) {
+    this.allPlanesById.clear();
+    planes.forEach(plane => this.allPlanesById.set(plane.id, plane));
+    this.clearSelectedPlaneIfMissing();
   }
 
   selectPlane(id: string | null) {
@@ -35,10 +36,13 @@ export class PlanesStore {
     if (!this.selectedPlaneId) return null;
 
     return (
-      this.allPlanes.find(p => p.id === this.selectedPlaneId) ?? null
+      this.allPlanesById.get(this.selectedPlaneId) ?? null
     );
   }
 
+  get allPlanes(): Plane[] {
+    return Array.from(this.allPlanesById.values());
+  }
 }
 
 export const planesStore = new PlanesStore();

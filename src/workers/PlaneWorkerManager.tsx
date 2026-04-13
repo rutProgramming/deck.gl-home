@@ -47,8 +47,8 @@ export class PlaneWorkerManager implements IPlaneWorkerManager {
     }
 
 
-    #getVisiblePlanesInViewport(bbox: BBox): Plane[] {
-        return this.#visiblePlanes.getPlanesInViewport(bbox, this.#planeWorker.getPlanesById())
+    #getVisiblePlanesInBBox(bbox: BBox): Plane[] {
+        return this.#visiblePlanes.getPlanesInBBox(bbox, this.#planeWorker.getPlanesById())
     }
 
     handleMessage(msg: Message) {
@@ -59,8 +59,8 @@ export class PlaneWorkerManager implements IPlaneWorkerManager {
                 this.#broadcastPlains.broadcastAllPlanes(this.#planeWorker.getPlanesById())
                 break
 
-            case "GET_VISIBLE_PLANES":
-                this.#broadcastPlains.broadcastVisiblePlanes(this.#getVisiblePlanesInViewport(msg.bbox))
+            case "REQUEST_VISIBLE_PLANES":
+                this.#broadcastPlains.broadcastVisiblePlanes(this.#getVisiblePlanesInBBox(msg.bbox))
                 break
 
             case "RENAME_PLANE":

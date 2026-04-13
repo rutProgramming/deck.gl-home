@@ -1,6 +1,6 @@
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { RadarMap } from './components/RadarMap/RadarMap';
+import { Map } from './components/Map/Map';
 
 import { useEffect } from 'react';
 import { ingestPlanes } from './services/workerClient';
@@ -20,7 +20,7 @@ export  function App() {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-      <RadarMap />
+      <Map />
     </ThemeProvider>
   );
 }

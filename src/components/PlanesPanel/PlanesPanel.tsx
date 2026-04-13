@@ -7,7 +7,7 @@ import { useEffect } from "react";
 export const PlanesPanel = observer(function PlanesPanel() {
   const apiRef = useGridApiRef();
 
-  const rows = planesStore.allPlanes.map((plane) => ({
+  const rows = Array.from(planesStore.allPlanesById.values()).map((plane) => ({
     id: plane.id,
     name: plane.name,
     country: plane.country,
@@ -25,6 +25,7 @@ export const PlanesPanel = observer(function PlanesPanel() {
     ids: planesStore.selectedPlaneId ? new Set<GridRowId>([planesStore.selectedPlaneId]) : new Set(),
   };
 
+
   const handleRowSelectionChange = (model: GridRowSelectionModel) => {
     const selectedIds = Array.from(model.ids).filter((id): id is string => typeof id === "string");
     planesStore.selectPlane(selectedIds[0] ?? null);
@@ -33,9 +34,9 @@ export const PlanesPanel = observer(function PlanesPanel() {
     const id = planesStore.selectedPlaneId;
     if (!id || !apiRef.current) return;
 
-    const rowIndex = planesStore.allPlanes.findIndex(p => p.id === id);
-    if (rowIndex === -1) return;
+    const rowIndex = planesStore.allPlanes.findIndex((row) => row.id === id);
 
+    if (rowIndex === -1) return;
     const pageSize = 5;
     const page = Math.floor(rowIndex / pageSize);
 
