@@ -2,34 +2,24 @@ import { useRef } from "react";
 import { Box } from "@mui/material";
 import { PlaneEditor } from "../PlaneEditor/PlaneEditor";
 import { PlanesPanel } from "../PlanesPanel/PlanesPanel";
-import { useRadarMap } from "./useRadarMap";
+import { useMap } from "./useMap";
 import { planesStore } from "../../store/planes.store";
-import { getVisiblePlanes } from "../../services/workerClient";
-import { RadarDeck } from "./RadarDeck";
+import { DeckGlMapRenderer } from "./DeckGlMapRenderer";
 import { makePlanesIconLayer } from "../../layers/planesIconLayer";
 import plane from "../../assets/PM.png";
+import type { Plane } from "../../Plane/plane.types";
 
-const INITIAL_VIEW_STATE = {
-    longitude: 34.85, 
-    latitude: 31.95,
-    zoom: 6,
-    bearing: 0, 
-    pitch: 0,
-};
+ 
 
-export function RadarMap() {
+export function Map() {
     const mapContainerRef = useRef<HTMLDivElement | null>(null);
 
-    useRadarMap(mapContainerRef, {
-        initialViewState: INITIAL_VIEW_STATE,
-        createLayer: () => new RadarDeck(
+    const flyToPlaneCallback = useMap(mapContainerRef, 
+        () => new DeckGlMapRenderer<Plane>(
             (id) => planesStore.selectPlane(id),
-            ({ data, selectedId, onPickPlane }) =>
-                makePlanesIconLayer({ data, selectedId, iconAtlas: plane, onPickPlane })
-        ),
-        getVisiblePlanes,
-        store: planesStore,
-    });
+            ({ data, selectedId, onPickItem }) => makePlanesIconLayer({ data, selectedId, iconAtlas: plane,onPickPlane: onPickItem })
+        )
+    );
 
     return (
         <Box style={{ width: "100vw", height: "100vh", position: "relative" }}>
@@ -38,7 +28,7 @@ export function RadarMap() {
                 <PlaneEditor />
             </Box>
             <Box style={{ position: "absolute", bottom: 16, left: 100, zIndex: 10 }}>
-                <PlanesPanel />
+                <PlanesPanel flyToPlane={(lat, lon) => flyToPlaneCallback(lat, lon)} />
             </Box>
         </Box>
     );

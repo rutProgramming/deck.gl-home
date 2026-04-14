@@ -1,11 +1,11 @@
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { RadarMap } from './components/RadarMap/RadarMap';
+import { Map } from './components/Map/Map';
 
 import { useEffect } from 'react';
 import { ingestPlanes } from './services/workerClient';
 import planesData from './data/sample_planes_with_heading.json';
-import { buildValidPlanesList } from './domain/plane.normalize';
+import { buildValidPlanesList } from './Plane/plane.normalize';
 
 const darkTheme = createTheme({
   palette: {
@@ -20,7 +20,7 @@ export  function App() {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-      <RadarMap />
+      <Map />
     </ThemeProvider>
   );
 }
