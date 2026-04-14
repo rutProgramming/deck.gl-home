@@ -1,4 +1,4 @@
-import type { Plane } from "../domain/plane.types"
+import type { Plane } from "../Plane/plane.types"
 
 export interface IPlaneWorker {
     ingestPlanes(planes: Plane[]): void

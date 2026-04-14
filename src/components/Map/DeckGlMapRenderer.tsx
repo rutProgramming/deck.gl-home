@@ -1,7 +1,6 @@
 import { Deck } from "@deck.gl/core";
-import type { ViewState } from "./Map.type";
-import type { IMapDrawer } from "./IMapDrawer";
-import type { ItemLayerFactory } from "./Map.type";
+import type { DeckIconLayerFactory, ViewState } from "./Map.type";
+import type { IMapRenderer  } from "./IMapRenderer";
 import maplibregl from "maplibre-gl";
 
 
@@ -13,14 +12,14 @@ const INITIAL_VIEW_STATE = {
     pitch: 0,
 };
 
-export class DeckMapDrawer<T> implements IMapDrawer<T> {
+export class DeckGlMapRenderer<T> implements IMapRenderer <T> {
     private deck?: Deck;
     private maplibreMap?: maplibregl.Map;
-    private readonly onPlaneClick: (id: string) => void;
-    private readonly makeLayer: ItemLayerFactory<T>;
+    private readonly onIconClick: (id: string) => void;
+    private readonly makeLayer: DeckIconLayerFactory<T>;
 
-    constructor(onPlaneClick: (id: string) => void, makeLayer: ItemLayerFactory<T>) {
-        this.onPlaneClick = onPlaneClick;
+    constructor(onIconClick: (id: string) => void, makeLayer: DeckIconLayerFactory<T>) {
+        this.onIconClick = onIconClick;
         this.makeLayer = makeLayer;
     }
 
@@ -63,7 +62,7 @@ export class DeckMapDrawer<T> implements IMapDrawer<T> {
         this.deck?.setProps({ viewState });
     }
     
-   flyToPlane = (lat: number, lon: number): void => {
+   flyToLocation = (lat: number, lon: number): void => {
     if (!this.maplibreMap || !this.deck) return;
 
     const bounds = this.maplibreMap.getBounds();
@@ -87,7 +86,7 @@ export class DeckMapDrawer<T> implements IMapDrawer<T> {
         const layer = this.makeLayer({
             data,
             selectedId,
-            onPickPlane: this.onPlaneClick
+            onPickIcon: this.onIconClick
         });
 
         this.deck?.setProps({ layers: [layer] });

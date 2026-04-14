@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import type { Plane } from "../domain/plane.types";
+import type { Plane } from "../Plane/plane.types";
 
 export class PlanesStore {
   allPlanesById = new Map<string, Plane>()

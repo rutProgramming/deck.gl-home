@@ -1,4 +1,4 @@
-import type { Plane } from "../domain/plane.types"
+import type { Plane } from "../Plane/plane.types"
 import type { IBroadcastPlains } from "./BroadcastPlains"
 import type { IPlaneWorker } from "./PlaneWorker"
 import type { IVisiblePlanes } from "./VisiblePlanes"

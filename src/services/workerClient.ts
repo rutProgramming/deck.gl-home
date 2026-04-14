@@ -1,5 +1,5 @@
 import PlaneWorker from "../workers/plane.worker.ts?sharedworker"
-import type { Plane } from "../domain/plane.types"
+import type { Plane } from "../Plane/plane.types"
 import { planesStore } from "../store/planes.store"
 
 type BBox = {

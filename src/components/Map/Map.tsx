@@ -4,23 +4,22 @@ import { PlaneEditor } from "../PlaneEditor/PlaneEditor";
 import { PlanesPanel } from "../PlanesPanel/PlanesPanel";
 import { useMap } from "./useMap";
 import { planesStore } from "../../store/planes.store";
-import { DeckMapDrawer } from "./DeckMapDrawer";
+import { DeckGlMapRenderer } from "./DeckGlMapRenderer";
 import { makePlanesIconLayer } from "../../layers/planesIconLayer";
 import plane from "../../assets/PM.png";
-import type { Plane } from "../../domain/plane.types";
+import type { Plane } from "../../Plane/plane.types";
 
  
 
 export function Map() {
     const mapContainerRef = useRef<HTMLDivElement | null>(null);
 
-    const flyToPlaneRef = useMap(mapContainerRef, {
-        createLayer: () => new DeckMapDrawer<Plane>(
+    const flyToPlaneCallback = useMap(mapContainerRef, 
+        () => new DeckGlMapRenderer<Plane>(
             (id) => planesStore.selectPlane(id),
-            ({ data, selectedId, onPickPlane }) =>
-                makePlanesIconLayer({ data, selectedId, iconAtlas: plane, onPickPlane })
+            ({ data, selectedId, onPickIcon }) => makePlanesIconLayer({ data, selectedId, iconAtlas: plane, onPickPlane: onPickIcon })
         )
-    });
+    );
 
     return (
         <Box style={{ width: "100vw", height: "100vh", position: "relative" }}>
@@ -29,7 +28,7 @@ export function Map() {
                 <PlaneEditor />
             </Box>
             <Box style={{ position: "absolute", bottom: 16, left: 100, zIndex: 10 }}>
-                <PlanesPanel flyToPlane={(lat, lon) => flyToPlaneRef.current?.(lat, lon)} />
+                <PlanesPanel flyToPlane={(lat, lon) => flyToPlaneCallback(lat, lon)} />
             </Box>
         </Box>
     );

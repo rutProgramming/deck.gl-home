@@ -1,35 +1,31 @@
-import { useEffect, useRef, type RefObject } from "react";
+import { useCallback, useEffect, useRef, type RefObject } from "react";
 import { reaction } from "mobx";
-import  { Map } from "maplibre-gl";
-import type { IMapDrawer } from "./IMapDrawer";
-import type { IMapOptions } from "./IMapOptions";
+import type { IMapRenderer } from "./IMapRenderer";
 import { requestVisiblePlanes } from "../../services/workerClient";
 import { planesStore } from "../../store/planes.store";
-import type { Plane } from "../../domain/plane.types";
-
+import type { Plane } from "../../Plane/plane.types";
 
 
 export function useMap(
     mapContainerRef: RefObject<HTMLDivElement | null>,
-    options: IMapOptions
+    createMapRenderer: () => IMapRenderer<Plane>
 ) {
-    const mapRef = useRef<Map | null>(null);
-    const layerRef = useRef<IMapDrawer<Plane> | null>(null);
-    const flyToPlane = useRef<(lat: number, lon: number) => void|null>(null);
-
+    const mapRendererRef = useRef<IMapRenderer<Plane> | null>(null);
+    const flyToPlaneCallback = useCallback((lat: number, lon: number) => {
+        const drawer = mapRendererRef.current;
+        if (!drawer) return;
+        drawer.flyToLocation(lat, lon);
+    }, []);
 
     useEffect(() => {
         if (!mapContainerRef.current) return;
-        const { createLayer } = options;
-        const layer = createLayer();
-        layer.attach(mapContainerRef.current);
-        layerRef.current = layer;
-        const map = layerRef.current?.getMapInstance()
+        const mapDrawer = createMapRenderer();
+        mapDrawer.attach(mapContainerRef.current);
+        mapRendererRef.current = mapDrawer;
+        const map = mapRendererRef.current?.getMapInstance()
         if (!map) return
-        mapRef.current = map;
-        flyToPlane.current = layer.flyToPlane;
         const resizeObserver = new ResizeObserver(() => map.resize());
-        resizeObserver.observe(mapContainerRef.current!);
+        resizeObserver.observe(mapContainerRef.current);
         const requestVisiblePlanesFromWorker = () => {
             const bounds = map.getBounds();
             requestVisiblePlanes({
@@ -44,18 +40,19 @@ export function useMap(
         const disposeLayerReactionRef = reaction(
             () => ({ planes: planesStore.visiblePlanes, selectedId: planesStore.selectedPlaneId }),
             ({ planes, selectedId }) => {
-                layerRef.current?.renderItems(planes, selectedId)
+                mapRendererRef.current?.renderItems(planes, selectedId)
             },
             { fireImmediately: true }
         );
 
         return () => {
-            layerRef.current?.cleanUp();
+            mapRendererRef.current?.cleanUp();
             disposeLayerReactionRef();
-            mapRef.current = null;
             resizeObserver.disconnect();
         };
+
     }, [mapContainerRef]);
 
-return flyToPlane;}
+    return flyToPlaneCallback;
+}
 

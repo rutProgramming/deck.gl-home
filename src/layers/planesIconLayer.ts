@@ -1,6 +1,6 @@
 import { IconLayer } from "@deck.gl/layers";
-import type { Plane } from "../domain/plane.types";
-import { countryToRgb } from "../domain/plane.color";
+import type { Plane } from "../Plane/plane.types";
+import { countryToRgb } from "../Plane/plane.color";
 
 export type PlanesIconLayer = {
   id?: string;
