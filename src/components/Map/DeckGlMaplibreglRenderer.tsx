@@ -1,7 +1,8 @@
 import { Deck } from "@deck.gl/core";
-import type { DeckIconLayerFactory, ViewState } from "./Map.type";
+import type { DeckIconLayerFactory,ViewState } from "./Map.type";
 import type { IMapRenderer  } from "./IMapRenderer";
 import maplibregl from "maplibre-gl";
+import type { BBox } from "../../workers/types";
 
 
 const INITIAL_VIEW_STATE = {
@@ -61,8 +62,13 @@ export class DeckGlMaplibreglRenderer<T> implements IMapRenderer <T> {
     setViewState(viewState: ViewState): void {
         this.deck?.setProps({ viewState });
     }
-    getBounds() {
-        return this.maplibreMap?.getBounds();
+    getBounds():BBox | undefined {
+        return {
+            west: this.maplibreMap?.getBounds().getWest() ?? 0,
+            north: this.maplibreMap?.getBounds().getNorth() ?? 0,
+            east: this.maplibreMap?.getBounds().getEast() ?? 0,
+            south: this.maplibreMap?.getBounds().getSouth() ?? 0
+        }
     }
    flyToLocation = (lat: number, lon: number): void => {
     if (!this.maplibreMap || !this.deck) return;

@@ -18,10 +18,10 @@ export function useMap(
             const bounds = mapRenderer.getBounds();
             if(!bounds) return;
             visiblePlanesRecalculate({
-                west: bounds.getWest(),
-                east: bounds.getEast(),
-                north: bounds.getNorth(),
-                south: bounds.getSouth(),
+                west: bounds.west,
+                east: bounds.east,
+                north: bounds.north,
+                south: bounds.south,
             });
         };
         updateMapBounds();

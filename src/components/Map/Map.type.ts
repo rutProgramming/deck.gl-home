@@ -13,3 +13,11 @@ export type DeckIconLayerFactory<T> = (options: {
     selectedId: string | null;
     onPickItem: (id: string) => void;
 }) => IconLayer<T, {}>;
+
+
+export type MapBounds = () => {
+    west: number;
+    east: number;
+    south: number;
+    north: number;
+}
