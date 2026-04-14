@@ -15,29 +15,19 @@ export function useMap(
 ) {
     const mapRef = useRef<Map | null>(null);
     const layerRef = useRef<IMapDrawer<Plane> | null>(null);
+    const flyToPlane = useRef<(lat: number, lon: number) => void|null>(null);
 
 
     useEffect(() => {
         if (!mapContainerRef.current) return;
-
         const { createLayer } = options;
-
-        // const flyToPlane = (plane: Plane | null) => {
-        //     if (!plane) return;
-        //     const { lat, lon } = plane.geoLocation;
-        //     const bounds = map.getBounds();
-        //     const visible = lon >= bounds.getWest() && lon <= bounds.getEast()
-        //         && lat >= bounds.getSouth() && lat <= bounds.getNorth();
-        //     if (!visible) map.flyTo({ center: [lon, lat], zoom: Math.max(map.getZoom(), 8), duration: 800 });
-        // };
-
         const layer = createLayer();
         layer.attach(mapContainerRef.current!);
         layerRef.current = layer;
         const map = layerRef.current?.getMapInstance()
         if (!map) return
         mapRef.current = map;
-
+        flyToPlane.current = layer.flyToPlane;
         const resizeObserver = new ResizeObserver(() => map.resize());
         resizeObserver.observe(mapContainerRef.current!);
         const requestVisiblePlanesFromWorker = () => {
@@ -67,5 +57,6 @@ export function useMap(
             resizeObserver.disconnect();
         };
     }, [mapContainerRef]);
-}
+
+return flyToPlane;}
 

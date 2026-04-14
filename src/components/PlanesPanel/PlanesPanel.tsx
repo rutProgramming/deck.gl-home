@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import { DataGrid, useGridApiRef, type GridColDef, type GridRowId, type GridRowSelectionModel } from "@mui/x-data-grid";
 import { useEffect } from "react";
 
-export const PlanesPanel = observer(function PlanesPanel() {
+export const PlanesPanel = observer(function PlanesPanel({ flyToPlane }: { flyToPlane: (lat: number, lon: number) => void | null }) {
   const apiRef = useGridApiRef();
 
   const rows = Array.from(planesStore.allPlanesById.values()).map((plane) => ({
@@ -29,6 +29,14 @@ export const PlanesPanel = observer(function PlanesPanel() {
   const handleRowSelectionChange = (model: GridRowSelectionModel) => {
     const selectedIds = Array.from(model.ids).filter((id): id is string => typeof id === "string");
     planesStore.selectPlane(selectedIds[0] ?? null);
+    console.log('fly',flyToPlane);
+    if (flyToPlane) {
+      if (planesStore.selectedPlane) {
+        
+        console.log('need to fly',flyToPlane);
+        flyToPlane(planesStore.selectedPlane.geoLocation.lat, planesStore.selectedPlane.geoLocation.lon);
+      }
+    }
   };
   useEffect(() => {
     const id = planesStore.selectedPlaneId;

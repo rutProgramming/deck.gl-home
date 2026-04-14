@@ -14,7 +14,7 @@ import type { Plane } from "../../domain/plane.types";
 export function Map() {
     const mapContainerRef = useRef<HTMLDivElement | null>(null);
 
-    useMap(mapContainerRef, {
+    const flyToPlaneRef = useMap(mapContainerRef, {
         createLayer: () => new DeckMapDrawer<Plane>(
             (id) => planesStore.selectPlane(id),
             ({ data, selectedId, onPickPlane }) =>
@@ -29,7 +29,7 @@ export function Map() {
                 <PlaneEditor />
             </Box>
             <Box style={{ position: "absolute", bottom: 16, left: 100, zIndex: 10 }}>
-                <PlanesPanel />
+                <PlanesPanel flyToPlane={(lat, lon) => flyToPlaneRef.current?.(lat, lon)} />
             </Box>
         </Box>
     );

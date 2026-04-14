@@ -62,7 +62,27 @@ export class DeckMapDrawer<T> implements IMapDrawer<T> {
     setViewState(viewState: ViewState): void {
         this.deck?.setProps({ viewState });
     }
+    
+   flyToPlane = (lat: number, lon: number): void => {
+    if (!this.maplibreMap || !this.deck) return;
 
+    const bounds = this.maplibreMap.getBounds();
+    const visible = lon >= bounds.getWest() && lon <= bounds.getEast()
+        && lat >= bounds.getSouth() && lat <= bounds.getNorth();
+
+    if (!visible) {
+        this.deck.setProps({
+            viewState: {
+                longitude: lon,
+                latitude: lat,
+                zoom: Math.max(this.maplibreMap.getZoom(), 8),
+                bearing: 0,
+                pitch: 0,
+                transitionDuration: 800,
+            }
+        });
+    }
+};
     renderItems(data: T[], selectedId: string | null): void {
         const layer = this.makeLayer({
             data,
