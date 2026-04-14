@@ -1,8 +1,6 @@
 import type { Plane } from "../planeUtils/plane.types";
 import type { BBox } from "./types";
 
-
-
 const checkPlaneInBBox = (plane: Plane, bbox: BBox): boolean => {
     return (
         plane.geoLocation.lon >= bbox.west &&

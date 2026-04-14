@@ -1,11 +1,11 @@
 import type { Plane } from "../planeUtils/plane.types"
 
-export interface IPlaneWorker {
+export interface IPlaneData {
     setPlanes(planes: Plane[]): void
     renamePlane(id: string, name: string): void
     getPlanesById(): Map<string, Plane>
 }
-class PlaneData implements IPlaneWorker {
+class PlaneData implements IPlaneData {
     #planesById = new Map<string, Plane>()
    
     setPlanes(planes: Plane[]) {

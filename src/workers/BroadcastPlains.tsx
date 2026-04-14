@@ -21,7 +21,7 @@ class BroadcastData<T> implements IBroadcastData<T> {
             port.postMessage({ type, data })
         }
     }
-    broadcastAllData(dataById: Map<string, T>, massage:string): void {// do spesific type
+    broadcastAllData(dataById: Map<string, T>, massage:string): void {
         const data = Array.from(dataById.values())
         this.postMessageToAllPorts(massage, data)
     }

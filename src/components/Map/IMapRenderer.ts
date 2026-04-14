@@ -9,7 +9,7 @@ import type { BBox } from "../../workers/types";
 export interface IMapRenderer<T> {
     attach(container: HTMLDivElement): void;
     renderItems(data: T[], selectedId: string | null): void;
-    getBounds(): BBox | undefined
+    getBounds(): BBox | null
     cleanUp(): void;
     getMapInstance(): maplibregl.Map | undefined;
     flyToLocation(lat: number, lon: number): void;
