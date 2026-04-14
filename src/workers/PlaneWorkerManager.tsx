@@ -1,37 +1,32 @@
-import type { Plane } from "../Plane/plane.types"
+import type { Plane } from "../planeUtils/plane.types"
 import type { IBroadcastPlains } from "./BroadcastPlains"
 import type { IPlaneWorker } from "./PlaneWorker"
-import type { IVisiblePlanes } from "./VisiblePlanes"
+import { getPlanesInBBox } from "./VisiblePlanes"
 import type { BBox, Message } from "./worker.types"
 
 export interface IPlaneWorkerManager {
     handleMessage(msg: Message): void
 }
 export class PlaneWorkerManager implements IPlaneWorkerManager {
-    #visiblePlanes: IVisiblePlanes
     #broadcastPlains: IBroadcastPlains
     #planeWorker: IPlaneWorker
 
     private static _instance: PlaneWorkerManager
 
     private constructor(
-        visiblePlanes: IVisiblePlanes,
         broadcastPlains: IBroadcastPlains,
         planeWorker: IPlaneWorker
     ) {
-        this.#visiblePlanes = visiblePlanes
         this.#broadcastPlains = broadcastPlains
         this.#planeWorker = planeWorker
     }
 
     static init(
-        visiblePlanes: IVisiblePlanes,
         broadcastPlains: IBroadcastPlains,
         planeWorker: IPlaneWorker
     ) {
         if (!PlaneWorkerManager._instance) {
             PlaneWorkerManager._instance = new PlaneWorkerManager(
-                visiblePlanes,
                 broadcastPlains,
                 planeWorker
             )
@@ -48,18 +43,18 @@ export class PlaneWorkerManager implements IPlaneWorkerManager {
 
 
     #getVisiblePlanesInBBox(bbox: BBox): Plane[] {
-        return this.#visiblePlanes.getPlanesInBBox(bbox, this.#planeWorker.getPlanesById())
+        return getPlanesInBBox(bbox, this.#planeWorker.getPlanesById())
     }
 
     handleMessage(msg: Message) {
         switch (msg.type) {
-            case "INGEST_PLANES":
+            case "SET_PLANES":
 
-                this.#planeWorker.ingestPlanes(msg.planes)
+                this.#planeWorker.setPlanes(msg.planes)
                 this.#broadcastPlains.broadcastAllPlanes(this.#planeWorker.getPlanesById())
                 break
 
-            case "REQUEST_VISIBLE_PLANES":
+            case "VISIBLE_PLANES_RECALCULATE":
                 this.#broadcastPlains.broadcastVisiblePlanes(this.#getVisiblePlanesInBBox(msg.bbox))
                 break
 

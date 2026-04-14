@@ -61,7 +61,9 @@ export class DeckGlMapRenderer<T> implements IMapRenderer <T> {
     setViewState(viewState: ViewState): void {
         this.deck?.setProps({ viewState });
     }
-    
+    getBounds() {
+        return this.maplibreMap?.getBounds();
+    }
    flyToLocation = (lat: number, lon: number): void => {
     if (!this.maplibreMap || !this.deck) return;
 

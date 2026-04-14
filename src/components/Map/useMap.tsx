@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, type RefObject } from "react";
 import { reaction } from "mobx";
 import type { IMapRenderer } from "./IMapRenderer";
-import { requestVisiblePlanes } from "../../services/workerClient";
 import { planesStore } from "../../store/planes.store";
-import type { Plane } from "../../Plane/plane.types";
+import type { Plane } from "../../planeUtils/plane.types";
+import { visiblePlanesRecalculate } from "../../services/workerClient";
 
 
 export function useMap(
@@ -22,20 +22,18 @@ export function useMap(
         const mapRenderer = createMapRenderer();
         mapRenderer.attach(mapContainerRef.current);
         mapRendererRef.current = mapRenderer;
-        const map = mapRendererRef.current?.getMapInstance()
-        if (!map) return
-        const resizeObserver = new ResizeObserver(() => map.resize());
-        resizeObserver.observe(mapContainerRef.current);
-        const requestVisiblePlanesFromWorker = () => {
-            const bounds = map.getBounds();
-            requestVisiblePlanes({
+
+        const updateMapBounds = () => {
+            const bounds = mapRenderer.getBounds();
+            if(!bounds) return;
+            visiblePlanesRecalculate({
                 west: bounds.getWest(),
                 east: bounds.getEast(),
                 north: bounds.getNorth(),
                 south: bounds.getSouth(),
             });
         };
-        requestVisiblePlanesFromWorker();
+        updateMapBounds();
 
         const disposeLayerReactionRef = reaction(
             () => ({ planes: planesStore.visiblePlanes, selectedId: planesStore.selectedPlaneId }),
@@ -48,7 +46,7 @@ export function useMap(
         return () => {
             mapRendererRef.current?.cleanUp();
             disposeLayerReactionRef();
-            resizeObserver.disconnect();
+            // resizeObserver.disconnect();
         };
 
     }, [mapContainerRef]);

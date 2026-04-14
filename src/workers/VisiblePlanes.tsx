@@ -1,36 +1,22 @@
-import type { Plane } from "../Plane/plane.types";
+import type { Plane } from "../planeUtils/plane.types";
 import type { BBox } from "./worker.types";
 
-export interface IVisiblePlanes {
-    getPlanesInBBox(bbox: BBox, planesById: Map<string, Plane>): Plane[]
+
+
+const checkPlaneInBBox = (plane: Plane, bbox: BBox): boolean => {
+    return (
+        plane.geoLocation.lon >= bbox.west &&
+        plane.geoLocation.lon <= bbox.east &&
+        plane.geoLocation.lat >= bbox.south &&
+        plane.geoLocation.lat <= bbox.north
+    )
 }
-
-export class VisiblePlanes implements IVisiblePlanes {
-
-    #checkPlaneInBBox(plane: Plane, bbox: BBox): boolean {
-        return (
-            plane.geoLocation.lon >= bbox.west &&
-            plane.geoLocation.lon <= bbox.east &&
-            plane.geoLocation.lat >= bbox.south &&
-            plane.geoLocation.lat <= bbox.north
-        )
-    }
-    getPlanesInBBox(bbox: BBox, planesById: Map<string, Plane>): Plane[] {
-        const result: Plane[] = []
-        for (const plane of planesById.values()) {
-            if (this.#checkPlaneInBBox(plane, bbox)) {
-                result.push(plane)
-            }
+export const getPlanesInBBox = (bbox: BBox, planesById: Map<string, Plane>): Plane[] => {
+    const result: Plane[] = []
+    for (const plane of planesById.values()) {
+        if (checkPlaneInBBox(plane, bbox)) {
+            result.push(plane)
         }
-        return result
     }
-    private static _instance: VisiblePlanes
-    private constructor() {} 
-
-    static getInstance() {
-        if (!VisiblePlanes._instance) {
-            VisiblePlanes._instance = new VisiblePlanes()
-        }
-        return VisiblePlanes._instance
-    }
+    return result
 }

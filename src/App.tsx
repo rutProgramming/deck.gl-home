@@ -3,9 +3,9 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { Map } from './components/Map/Map';
 
 import { useEffect } from 'react';
-import { ingestPlanes } from './services/workerClient';
+import { setPlanes } from './services/workerClient';
 import planesData from './data/sample_planes_with_heading.json';
-import { buildValidPlanesList } from './Plane/plane.normalize';
+import { buildValidPlanesList } from './planeUtils/plane.normalize';
 
 const darkTheme = createTheme({
   palette: {
@@ -15,7 +15,7 @@ const darkTheme = createTheme({
 
 export  function App() {
   useEffect(() => {
-  ingestPlanes(buildValidPlanesList(planesData))
+  setPlanes(buildValidPlanesList(planesData))
 }, [])
   return (
     <ThemeProvider theme={darkTheme}>

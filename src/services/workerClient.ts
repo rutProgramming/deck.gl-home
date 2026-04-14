@@ -1,5 +1,5 @@
 import PlaneWorker from "../workers/plane.worker.ts?sharedworker"
-import type { Plane } from "../Plane/plane.types"
+import type { Plane } from "../planeUtils/plane.types"
 import { planesStore } from "../store/planes.store"
 
 type BBox = {
@@ -12,16 +12,16 @@ type BBox = {
 const worker = new PlaneWorker()
 worker.port.start()
 
-export function ingestPlanes(planes: Plane[]) {
+export function setPlanes(planes: Plane[]) {
   worker.port.postMessage({
-    type: "INGEST_PLANES",
+    type: "SET_PLANES",
     planes
   })
 }
 
-export function requestVisiblePlanes(bbox: BBox) {
+export function visiblePlanesRecalculate(bbox: BBox) {
   worker.port.postMessage({
-    type: "REQUEST_VISIBLE_PLANES",
+    type: "VISIBLE_PLANES_RECALCULATE",
     bbox
   })
 }

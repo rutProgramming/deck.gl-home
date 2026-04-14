@@ -1,7 +1,7 @@
-import type { Plane } from "../Plane/plane.types"
+import type { Plane } from "../planeUtils/plane.types"
 
 export interface IPlaneWorker {
-    ingestPlanes(planes: Plane[]): void
+    setPlanes(planes: Plane[]): void
     renamePlane(id: string, name: string): void
     getPlanesById(): Map<string, Plane>
 }
@@ -14,7 +14,7 @@ export class PlaneWorker implements IPlaneWorker {
         if (!PlaneWorker._instance) PlaneWorker._instance = new PlaneWorker()
         return PlaneWorker._instance
     }
-    ingestPlanes(planes: Plane[]) {
+    setPlanes(planes: Plane[]) {
         for (const p of planes) {
             this.#planesById.set(p.id, p)
         }

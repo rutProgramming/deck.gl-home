@@ -8,3 +8,27 @@
 8.check rection or useEeferct-v
 6.syncCamera check -connect the mao and the deck -V
 
+
+
+
+
+1.map.resize());
+        resizeObserver.observe(mapContainerRef.current);
+        const requestVisiblePlanesFromWorker = () => {
+            const bounds = map.getBounds();
+            requestVisiblePlanes({
+                west: bounds.getWest(),
+                east: bounds.getEast(),
+                north: bounds.getNorth(),
+                south: bounds.getSouth(),
+            });
+        };
+        move to class
+
+
+2. // export const renderer:IMapRenderer<> = doit in provide usecontext
+ans change the name
+plane-planeuttils
+export class VisiblePlanes implements IVisiblePlanes {
+-change to function
+IBroadcastPlains-generic

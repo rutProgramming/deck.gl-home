@@ -1,4 +1,4 @@
-import type { Plane } from "../Plane/plane.types"
+import type { Plane } from "../planeUtils/plane.types"
 
 export interface IBroadcastPlains {
     postMessageToAllPorts(type: string, planes: Plane[]): void

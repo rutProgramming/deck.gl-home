@@ -1,4 +1,4 @@
-import type { Plane } from "../Plane/plane.types"
+import type { Plane } from "../planeUtils/plane.types"
 
 export type BBox = {
   west: number
@@ -8,6 +8,6 @@ export type BBox = {
 }
 
 export type Message =
-  | { type: "INGEST_PLANES"; planes: Plane[] }
-  | { type: "REQUEST_VISIBLE_PLANES"; bbox: BBox }
+  | { type: "SET_PLANES"; planes: Plane[] }
+  | { type: "VISIBLE_PLANES_RECALCULATE"; bbox: BBox }
   | { type: "RENAME_PLANE"; id: string; name: string }

@@ -7,7 +7,7 @@ import { planesStore } from "../../store/planes.store";
 import { DeckGlMapRenderer } from "./DeckGlMapRenderer";
 import { makePlanesIconLayer } from "../../layers/planesIconLayer";
 import plane from "../../assets/PM.png";
-import type { Plane } from "../../Plane/plane.types";
+import type { Plane } from "../../planeUtils/plane.types";
 
  
 

@@ -1,4 +1,3 @@
-import type { Plane } from "../../Plane/plane.types";
 import type { IconLayer } from "@deck.gl/layers";
 export type ViewState = {
     longitude: number,
@@ -13,4 +12,4 @@ export type DeckIconLayerFactory<T> = (options: {
     data: T[];
     selectedId: string | null;
     onPickItem: (id: string) => void;
-}) => IconLayer<Plane, {}>;
+}) => IconLayer<T, {}>;
