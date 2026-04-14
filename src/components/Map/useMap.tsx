@@ -22,7 +22,7 @@ export function useMap(
         if (!mapContainerRef.current) return;
         const { createLayer } = options;
         const layer = createLayer();
-        layer.attach(mapContainerRef.current!);
+        layer.attach(mapContainerRef.current);
         layerRef.current = layer;
         const map = layerRef.current?.getMapInstance()
         if (!map) return
@@ -41,7 +41,6 @@ export function useMap(
         };
         requestVisiblePlanesFromWorker();
 
-        // const disposeFlyToRef = reaction(() => planesStore.selectedPlane, flyToPlane);
         const disposeLayerReactionRef = reaction(
             () => ({ planes: planesStore.visiblePlanes, selectedId: planesStore.selectedPlaneId }),
             ({ planes, selectedId }) => {
