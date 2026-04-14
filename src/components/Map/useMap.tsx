@@ -12,16 +12,16 @@ export function useMap(
 ) {
     const mapRendererRef = useRef<IMapRenderer<Plane> | null>(null);
     const flyToPlaneCallback = useCallback((lat: number, lon: number) => {
-        const drawer = mapRendererRef.current;
-        if (!drawer) return;
-        drawer.flyToLocation(lat, lon);
+        const mapRenderer = mapRendererRef.current;
+        if (!mapRenderer) return;
+        mapRenderer.flyToLocation(lat, lon);
     }, []);
 
     useEffect(() => {
         if (!mapContainerRef.current) return;
-        const mapDrawer = createMapRenderer();
-        mapDrawer.attach(mapContainerRef.current);
-        mapRendererRef.current = mapDrawer;
+        const mapRenderer = createMapRenderer();
+        mapRenderer.attach(mapContainerRef.current);
+        mapRendererRef.current = mapRenderer;
         const map = mapRendererRef.current?.getMapInstance()
         if (!map) return
         const resizeObserver = new ResizeObserver(() => map.resize());
