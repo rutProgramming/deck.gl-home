@@ -17,7 +17,7 @@ export function Map() {
     const flyToPlaneCallback = useMap(mapContainerRef, 
         () => new DeckGlMapRenderer<Plane>(
             (id) => planesStore.selectPlane(id),
-            ({ data, selectedId, onPickIcon }) => makePlanesIconLayer({ data, selectedId, iconAtlas: plane, onPickPlane: onPickIcon })
+            ({ data, selectedId, onPickItem }) => makePlanesIconLayer({ data, selectedId, iconAtlas: plane,onPickPlane: onPickItem })
         )
     );
 

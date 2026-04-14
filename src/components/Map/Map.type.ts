@@ -12,5 +12,5 @@ export type ViewState = {
 export type DeckIconLayerFactory<T> = (options: {
     data: T[];
     selectedId: string | null;
-    onPickIcon: (id: string) => void;
+    onPickItem: (id: string) => void;
 }) => IconLayer<Plane, {}>;

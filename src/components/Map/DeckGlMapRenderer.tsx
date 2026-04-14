@@ -15,11 +15,11 @@ const INITIAL_VIEW_STATE = {
 export class DeckGlMapRenderer<T> implements IMapRenderer <T> {
     private deck?: Deck;
     private maplibreMap?: maplibregl.Map;
-    private readonly onIconClick: (id: string) => void;
+    private readonly onItemClick: (id: string) => void;
     private readonly makeLayer: DeckIconLayerFactory<T>;
 
-    constructor(onIconClick: (id: string) => void, makeLayer: DeckIconLayerFactory<T>) {
-        this.onIconClick = onIconClick;
+    constructor(onItemClick: (id: string) => void, makeLayer: DeckIconLayerFactory<T>) {
+        this.onItemClick = onItemClick;
         this.makeLayer = makeLayer;
     }
 
@@ -86,7 +86,7 @@ export class DeckGlMapRenderer<T> implements IMapRenderer <T> {
         const layer = this.makeLayer({
             data,
             selectedId,
-            onPickIcon: this.onIconClick
+            onPickItem: this.onItemClick
         });
 
         this.deck?.setProps({ layers: [layer] });
