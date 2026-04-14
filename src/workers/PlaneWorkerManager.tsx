@@ -1,67 +1,34 @@
 import type { Plane } from "../planeUtils/plane.types"
-import type { IBroadcastPlains } from "./BroadcastPlains"
-import type { IPlaneWorker } from "./PlaneWorker"
+import { broadcastData } from "./BroadcastPlains"
+import { planeData } from "./PlaneData"
+import type { BBox, Message } from "./types"
 import { getPlanesInBBox } from "./VisiblePlanes"
-import type { BBox, Message } from "./worker.types"
 
 export interface IPlaneWorkerManager {
     handleMessage(msg: Message): void
 }
-export class PlaneWorkerManager implements IPlaneWorkerManager {
-    #broadcastPlains: IBroadcastPlains
-    #planeWorker: IPlaneWorker
-
-    private static _instance: PlaneWorkerManager
-
-    private constructor(
-        broadcastPlains: IBroadcastPlains,
-        planeWorker: IPlaneWorker
-    ) {
-        this.#broadcastPlains = broadcastPlains
-        this.#planeWorker = planeWorker
-    }
-
-    static init(
-        broadcastPlains: IBroadcastPlains,
-        planeWorker: IPlaneWorker
-    ) {
-        if (!PlaneWorkerManager._instance) {
-            PlaneWorkerManager._instance = new PlaneWorkerManager(
-                broadcastPlains,
-                planeWorker
-            )
-        }
-        return PlaneWorkerManager._instance
-    }
-
-    static getInstance() {
-        if (!PlaneWorkerManager._instance) {
-            throw new Error("PlaneWorkerManager.init() must be called first")
-        }
-        return PlaneWorkerManager._instance
-    }
-
+class PlaneWorkerManager implements IPlaneWorkerManager {
 
     #getVisiblePlanesInBBox(bbox: BBox): Plane[] {
-        return getPlanesInBBox(bbox, this.#planeWorker.getPlanesById())
+        return getPlanesInBBox(bbox, planeData.getPlanesById())
     }
 
     handleMessage(msg: Message) {
         switch (msg.type) {
             case "SET_PLANES":
-
-                this.#planeWorker.setPlanes(msg.planes)
-                this.#broadcastPlains.broadcastAllPlanes(this.#planeWorker.getPlanesById())
+                planeData.setPlanes(msg.planes)
+                broadcastData.broadcastAllData(planeData.getPlanesById(), "ALL_PLANES")
                 break
 
             case "VISIBLE_PLANES_RECALCULATE":
-                this.#broadcastPlains.broadcastVisiblePlanes(this.#getVisiblePlanesInBBox(msg.bbox))
+                broadcastData.broadcastVisibleData(this.#getVisiblePlanesInBBox(msg.bbox), "VISIBLE_PLANES")
                 break
 
             case "RENAME_PLANE":
-                this.#planeWorker.renamePlane(msg.id, msg.name)
-                this.#broadcastPlains.broadcastAllPlanes(this.#planeWorker.getPlanesById())
+                planeData.renamePlane(msg.id, msg.name)
+                broadcastData.broadcastAllData(planeData.getPlanesById(), "ALL_PLANES")
                 break
         }
     }
 }
+export const PlaneWorkerManagerClass = new PlaneWorkerManager()

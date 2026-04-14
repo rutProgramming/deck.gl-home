@@ -2,10 +2,12 @@ import { observer } from "mobx-react-lite";
 import { planesStore } from "../../store/planes.store";
 import Box from "@mui/material/Box";
 import { DataGrid, useGridApiRef, type GridColDef, type GridRowId, type GridRowSelectionModel } from "@mui/x-data-grid";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
+import { MapRendererContext } from "../Map/IMapRenderer";
 
-export const PlanesPanel = observer(function PlanesPanel({ flyToPlane }: { flyToPlane: (lat: number, lon: number) => void | null }) {
+export const PlanesPanel = observer(function PlanesPanel() {
   const apiRef = useGridApiRef();
+  const rendererMap = useContext(MapRendererContext);
 
   const rows = Array.from(planesStore.allPlanesById.values()).map((plane) => ({
     id: plane.id,
@@ -29,11 +31,10 @@ export const PlanesPanel = observer(function PlanesPanel({ flyToPlane }: { flyTo
   const handleRowSelectionChange = (model: GridRowSelectionModel) => {
     const selectedIds = Array.from(model.ids).filter((id): id is string => typeof id === "string");
     planesStore.selectPlane(selectedIds[0] ?? null);
-    if (flyToPlane) {
-      if (planesStore.selectedPlane) {
-        flyToPlane(planesStore.selectedPlane.geoLocation.lat, planesStore.selectedPlane.geoLocation.lon);
-      }
+    if (rendererMap && planesStore.selectedPlane) {
+      rendererMap.flyToLocation(planesStore.selectedPlane.geoLocation.lat, planesStore.selectedPlane.geoLocation.lon);
     }
+
   };
   useEffect(() => {
     const id = planesStore.selectedPlaneId;

@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { setPlanes } from './services/workerClient';
 import planesData from './data/sample_planes_with_heading.json';
 import { buildValidPlanesList } from './planeUtils/plane.normalize';
+import { MapRendererContext, renderer } from './components/Map/IMapRenderer';
 
 const darkTheme = createTheme({
   palette: {
@@ -13,14 +14,16 @@ const darkTheme = createTheme({
   },
 });
 
-export  function App() {
+export function App() {
   useEffect(() => {
-  setPlanes(buildValidPlanesList(planesData))
-}, [])
+    setPlanes(buildValidPlanesList(planesData))
+  }, [])
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-      <Map />
+      <MapRendererContext.Provider value={renderer}>
+        <Map />
+      </MapRendererContext.Provider>
     </ThemeProvider>
   );
 }

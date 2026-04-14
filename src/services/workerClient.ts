@@ -37,12 +37,12 @@ export function renamePlane(id: string, name: string) {
 worker.port.onmessage = (event) => {  
   const msg = event.data
   
-  if (msg.type === "VISIBLE_PLANES") {
-    planesStore.setVisiblePlanes(msg.planes)
+  if (msg.type === "VISIBLE_PLANES") {    
+    planesStore.setVisiblePlanes(msg.data)
   }
 
   if (msg.type === "ALL_PLANES") {
-    planesStore.setAllPlanes(msg.planes)
+    planesStore.setAllPlanes(msg.data)
   }
 
 }

@@ -23,7 +23,6 @@ export class PlanesStore {
     }
   }
   setAllPlanes(planes: Plane[]) {
-    this.allPlanesById.clear();
     planes.forEach(plane => this.allPlanesById.set(plane.id, plane));
     this.clearSelectedPlaneIfMissing();
   }

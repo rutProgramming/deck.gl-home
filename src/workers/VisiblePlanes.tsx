@@ -1,5 +1,5 @@
 import type { Plane } from "../planeUtils/plane.types";
-import type { BBox } from "./worker.types";
+import type { BBox } from "./types";
 
 
 

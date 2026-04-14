@@ -1,22 +1,13 @@
 import type { Plane } from "../planeUtils/plane.types"
 
-export interface IBroadcastPlains {
-    postMessageToAllPorts(type: string, planes: Plane[]): void
-    broadcastAllPlanes(planesById: Map<string, Plane>): void
-    broadcastVisiblePlanes(visiblePlanes: Plane[]): void
+export interface IBroadcastData<T> {
+    postMessageToAllPorts(type: string, data: T[]): void
+    broadcastAllData(dataById: Map<string, T>, massage:string): void
+    broadcastVisibleData(visibledata: T[], massage:string): void
 }
-export class BroadcastPlains implements IBroadcastPlains {
+class BroadcastData<T> implements IBroadcastData<T> {
 
     #ports: MessagePort[] = []
-    private static _instance: BroadcastPlains
-    private constructor() { }
-
-    static getInstance() {
-        if (!BroadcastPlains._instance) {
-            BroadcastPlains._instance = new BroadcastPlains()
-        }
-        return BroadcastPlains._instance
-    }
     addPort(port: MessagePort) {
         if (!this.#ports.includes(port)) {
             port.start()
@@ -25,18 +16,20 @@ export class BroadcastPlains implements IBroadcastPlains {
     }
 
 
-    postMessageToAllPorts(type: string, planes: Plane[]) {
+    postMessageToAllPorts(type: string, data: T[]) {
         for (const port of this.#ports) {
-            port.postMessage({ type, planes })
+            port.postMessage({ type, data })
         }
     }
-    broadcastAllPlanes(planesById: Map<string, Plane>) {
-        const planes = Array.from(planesById.values())
-        this.postMessageToAllPorts("ALL_PLANES", planes)
+    broadcastAllData(dataById: Map<string, T>, massage:string): void {// do spesific type
+        const data = Array.from(dataById.values())
+        this.postMessageToAllPorts(massage, data)
     }
 
-    broadcastVisiblePlanes(visiblePlanes: Plane[]): void {
-        this.postMessageToAllPorts("VISIBLE_PLANES", visiblePlanes)
+    broadcastVisibleData(visibleData: T[], massage:string): void {
+        this.postMessageToAllPorts(massage, visibleData)
     }
 
 }
+
+export const broadcastData = new BroadcastData<Plane>()

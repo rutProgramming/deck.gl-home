@@ -24,11 +24,13 @@
             });
         };
         move to class
+-v
 
-
-2. // export const renderer:IMapRenderer<> = doit in provide usecontext
+2. // export const renderer:IMapRenderer<> = doit in provide usecontext-v
 ans change the name
-plane-planeuttils
-export class VisiblePlanes implements IVisiblePlanes {
+plane-planeuttils-v
+export class VisiblePlanes implements IVisiblePlanes {-v
 -change to function
 IBroadcastPlains-generic
+
+//do spesufuc type

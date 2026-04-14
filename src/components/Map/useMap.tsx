@@ -1,28 +1,19 @@
-import { useCallback, useEffect, useRef, type RefObject } from "react";
+import { useContext, useEffect, type RefObject } from "react";
 import { reaction } from "mobx";
-import type { IMapRenderer } from "./IMapRenderer";
+import { MapRendererContext } from "./IMapRenderer";
 import { planesStore } from "../../store/planes.store";
-import type { Plane } from "../../planeUtils/plane.types";
 import { visiblePlanesRecalculate } from "../../services/workerClient";
 
 
 export function useMap(
     mapContainerRef: RefObject<HTMLDivElement | null>,
-    createMapRenderer: () => IMapRenderer<Plane>
 ) {
-    const mapRendererRef = useRef<IMapRenderer<Plane> | null>(null);
-    const flyToPlaneCallback = useCallback((lat: number, lon: number) => {
-        const mapRenderer = mapRendererRef.current;
-        if (!mapRenderer) return;
-        mapRenderer.flyToLocation(lat, lon);
-    }, []);
-
+    const mapRenderer = useContext(MapRendererContext);
     useEffect(() => {
-        if (!mapContainerRef.current) return;
-        const mapRenderer = createMapRenderer();
+        if (!mapContainerRef.current|| !mapRenderer) {
+            return;
+        };
         mapRenderer.attach(mapContainerRef.current);
-        mapRendererRef.current = mapRenderer;
-
         const updateMapBounds = () => {
             const bounds = mapRenderer.getBounds();
             if(!bounds) return;
@@ -38,19 +29,17 @@ export function useMap(
         const disposeLayerReactionRef = reaction(
             () => ({ planes: planesStore.visiblePlanes, selectedId: planesStore.selectedPlaneId }),
             ({ planes, selectedId }) => {
-                mapRendererRef.current?.renderItems(planes, selectedId)
+                mapRenderer.renderItems(planes.length > 0 ? planes : [], selectedId)
             },
             { fireImmediately: true }
         );
 
         return () => {
-            mapRendererRef.current?.cleanUp();
+            mapRenderer.cleanUp();
             disposeLayerReactionRef();
-            // resizeObserver.disconnect();
         };
 
-    }, [mapContainerRef]);
+    }, [mapContainerRef, mapRenderer]);
 
-    return flyToPlaneCallback;
 }
 

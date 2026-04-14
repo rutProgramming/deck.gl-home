@@ -12,7 +12,7 @@ const INITIAL_VIEW_STATE = {
     pitch: 0,
 };
 
-export class DeckGlMapRenderer<T> implements IMapRenderer <T> {
+export class DeckGlMaplibreglRenderer<T> implements IMapRenderer <T> {
     private deck?: Deck;
     private maplibreMap?: maplibregl.Map;
     private readonly onItemClick: (id: string) => void;
@@ -84,7 +84,7 @@ export class DeckGlMapRenderer<T> implements IMapRenderer <T> {
         });
     }
 };
-    renderItems(data: T[], selectedId: string | null): void {
+    renderItems(data: T[], selectedId: string | null): void {        
         const layer = this.makeLayer({
             data,
             selectedId,
