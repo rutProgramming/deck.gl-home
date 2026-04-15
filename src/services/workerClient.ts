@@ -1,4 +1,4 @@
-import PlaneWorker from "../workers/plane.worker.ts?sharedworker"
+import Worker from "../workers/worker.ts?sharedworker"
 import type { Plane } from "../planeUtils/plane.types"
 import { planesStore } from "../store/planes.store"
 
@@ -9,7 +9,7 @@ type BBox = {
   north: number
 }
 
-const worker = new PlaneWorker()
+const worker = new Worker()
 worker.port.start()
 
 export function setPlanes(planes: Plane[]) {

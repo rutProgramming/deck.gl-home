@@ -6,21 +6,22 @@ import plane from "../../assets/PM.png";
 import { createContext } from "react";
 import type { BBox } from "../../workers/types";
 
-export interface IMapRenderer<T> {
-    attach(container: HTMLDivElement): void;
-    renderItems(data: T[], selectedId: string | null): void;
-    getBounds(): BBox | null
-    cleanUp(): void;
-    flyToLocation(lat: number, lon: number): void;
-}
 
-export const mapRenderer:IMapRenderer<Plane> = new DeckGlMaplibreglRenderer<Plane>(
+
+export abstract class MapRenderer<T> {
+    abstract attach(container: HTMLDivElement): void;
+    abstract renderItems(data: T[], selectedId: string | null): void;
+    abstract getBounds(): BBox | null;
+    abstract cleanUp(): void;
+    abstract flyToLocation(lon: number, lat: number): void;
+}
+export const mapRenderer:MapRenderer<Plane> = new DeckGlMaplibreglRenderer<Plane>(
             (id) => planesStore.selectPlane(id),
             ({ data, selectedId, onPickItem }) => makePlanesIconLayer({ data, selectedId, iconAtlas: plane ,onPickPlane: onPickItem })
         )
 
 export const MapRendererContext =
-  createContext<IMapRenderer<Plane> | null>(null);
+  createContext<MapRenderer<Plane> | null>(null);
 
 
         

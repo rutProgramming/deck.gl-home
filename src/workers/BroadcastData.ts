@@ -2,8 +2,7 @@ import type { Plane } from "../planeUtils/plane.types"
 
 export interface IBroadcastData<T> {
     postMessageToAllPorts(type: string, data: T[]): void
-    broadcastAllData(dataById: Map<string, T>, massage:string): void
-    broadcastVisibleData(visibledata: T[], massage:string): void
+    broadcastData(visibleData: T[], massage:string): void
 }
 class BroadcastData<T> implements IBroadcastData<T> {
 
@@ -21,12 +20,8 @@ class BroadcastData<T> implements IBroadcastData<T> {
             port.postMessage({ type, data })
         }
     }
-    broadcastAllData(dataById: Map<string, T>, massage:string): void {
-        const data = Array.from(dataById.values())
-        this.postMessageToAllPorts(massage, data)
-    }
 
-    broadcastVisibleData(visibleData: T[], massage:string): void {
+    broadcastData(visibleData: T[], massage:string): void {
         this.postMessageToAllPorts(massage, visibleData)
     }
 

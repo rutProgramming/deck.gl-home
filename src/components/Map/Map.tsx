@@ -1,21 +1,48 @@
-import { useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
+import { reaction } from "mobx";
+import { MapRendererContext } from "./IMapRenderer";
+import { planesStore } from "../../store/planes.store";
+import { visiblePlanesRecalculate } from "../../services/workerClient";
 import { Box } from "@mui/material";
-import { PlaneEditor } from "../PlaneEditor/PlaneEditor";
-import { PlanesPanel } from "../PlanesPanel/PlanesPanel";
-import { useMap } from "./useMap";
+
 
 export function Map() {
     const mapContainerRef = useRef<HTMLDivElement | null>(null);
-    useMap(mapContainerRef);
+    const mapRenderer = useContext(MapRendererContext);
+    useEffect(() => {
+        if (!mapContainerRef.current || !mapRenderer) {
+            return;
+        };
+        mapRenderer.attach(mapContainerRef.current);
+        const updateMapBounds = () => {
+            const bounds = mapRenderer.getBounds();
+            if (!bounds) return;
+            visiblePlanesRecalculate({
+                west: bounds.west,
+                east: bounds.east,
+                north: bounds.north,
+                south: bounds.south,
+            });
+        };
+        updateMapBounds();
+
+        const disposeLayerReactionRef = reaction(
+            () => ({ planes: planesStore.visiblePlanes, selectedId: planesStore.selectedPlaneId }),
+            ({ planes, selectedId }) => {
+                mapRenderer.renderItems(planes.length > 0 ? planes : [], selectedId)
+            },
+            { fireImmediately: true }
+        );
+
+        return () => {
+            mapRenderer.cleanUp();
+            disposeLayerReactionRef();
+        };
+
+    }, [mapContainerRef, mapRenderer]);
+
     return (
-        <Box style={{ width: "100vw", height: "100vh", position: "relative" }}>
-            <Box ref={mapContainerRef} style={{ width: "100%", height: "100%" }} />
-            <Box style={{ position: "absolute", top: 16, right: 100, zIndex: 10 }}>
-                <PlaneEditor />
-            </Box>
-            <Box style={{ position: "absolute", bottom: 16, left: 100, zIndex: 10 }}>
-                <PlanesPanel />
-            </Box>
-        </Box>
-    );
+        <Box ref={mapContainerRef} style={{ width: "100%", height: "100%" }} />
+    )
 }
+

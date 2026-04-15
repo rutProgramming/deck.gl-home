@@ -34,3 +34,14 @@ export class VisiblePlanes implements IVisiblePlanes {-v
 IBroadcastPlains-generic
 
 //do spesufuc type
+
+
+
+
+1.use map->component-V
+change profix tsx->tsx-V
+visibleplansechange the name vrodcast-V
+deletegetmapinstance-V
+brodastfunction union -V
+class PlaneWorkerManager implements IPlaneWorkerManager {
+-function-V

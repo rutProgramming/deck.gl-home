@@ -19,8 +19,6 @@ export class DeckGlMaplibreglRenderer<T> implements IMapRenderer <T> {
     private readonly onItemClick: (id: string) => void;
     private readonly makeLayer: DeckIconLayerFactory<T>;
 
-/*************  ✨ Windsurf Command ⭐  *************/
-/*******  d085339d-dc30-453e-94ad-c31c4cf19f78  *******/
     constructor(onItemClick: (id: string) => void, makeLayer: DeckIconLayerFactory<T>) {
         this.onItemClick = onItemClick;
         this.makeLayer = makeLayer;
@@ -61,9 +59,6 @@ export class DeckGlMaplibreglRenderer<T> implements IMapRenderer <T> {
 
     }
 
-    setViewState(viewState: ViewState): void {
-        this.deck?.setProps({ viewState });
-    }
     getBounds(): BBox | null {
     if (!this.maplibreMap) {
         return null
@@ -107,9 +102,7 @@ export class DeckGlMaplibreglRenderer<T> implements IMapRenderer <T> {
 
         this.deck?.setProps({ layers: [layer] });
     }
-    getMapInstance(): maplibregl.Map | undefined {
-        return this.maplibreMap;
-    }
+   
     cleanUp(): void {
         this.deck?.finalize();
         this.maplibreMap?.remove();
