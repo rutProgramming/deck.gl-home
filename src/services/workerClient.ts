@@ -20,7 +20,6 @@ export function setMapObjects(mapObjects: MapObject[]) {
 }
 
 export function visibleMapObjectsRecalculate(bbox: BBox) {
-  console.log('Recalculating visible map objects...');
   
   worker.port.postMessage({
     type: "VISIBLE_MAP_OBJECTS_RECALCULATE",

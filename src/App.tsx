@@ -5,8 +5,8 @@ import planesData from './data/sample_planes_with_heading.json';
 import carsData from './data/cars.json';
 import { mapRenderer, MapRendererContext } from './components/Map/IMapRenderer';
 import { Box } from '@mui/material';
-// import { PlaneEditor } from './components/PlaneEditor/PlaneEditor';
-// import { PlanesPanel } from './components/PlanesPanel/PlanesPanel';
+import { PlaneEditor } from './components/PlaneEditor/PlaneEditor';
+import { PlanesPanel } from './components/PlanesPanel/PlanesPanel';
 import { Map } from './components/Map/Map';
 import { setMapObjects } from './services/workerClient';
 
@@ -21,7 +21,7 @@ export function App() {
   const planes = planesData.map(p => ({ ...p, type: "plane" as const }))
   const cars = carsData.map(c => ({ ...c, id: String(c.id), type: "car" as const }))
   
-  setMapObjects([...planes, ...cars])
+  setMapObjects([...planes, ...cars, ])
   }, [])
   return (
     <ThemeProvider theme={darkTheme}>
@@ -30,10 +30,10 @@ export function App() {
           <Box style={{ width: "100vw", height: "100vh", position: "relative" }}>
             <Map />
             <Box style={{ position: "absolute", top: 16, right: 100, zIndex: 10 }}>
-                {/* <PlaneEditor /> */}
+                <PlaneEditor />
             </Box>
             <Box style={{ position: "absolute", bottom: 16, left: 100, zIndex: 10 }}>
-                {/* <PlanesPanel /> */}
+                <PlanesPanel />
             </Box>
         </Box>
       </MapRendererContext.Provider>

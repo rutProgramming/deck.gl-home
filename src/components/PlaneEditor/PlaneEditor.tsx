@@ -10,15 +10,26 @@ import {
 } from "@mui/material";
 import { mapObjectsStore } from "../../store/mapObjectStore.store";
 import { renameMapObject } from "../../services/workerClient";
+import type { Plane } from "../../models/Plane";
 
 export const PlaneEditor = observer(function PlaneEditor() {
     const selectedMapObject = mapObjectsStore.selectedMapObject;
-
     const [editName, setEditName] = useState("");
 
     useEffect(() => {
         setEditName(selectedMapObject?.name ?? "");
     }, [selectedMapObject?.id,selectedMapObject?.name]);
+    
+     if (selectedMapObject?.type !== "plane") {
+        return (
+            <Paper elevation={3} sx={{ p: 2, textAlign: "center" }}>
+                <Typography variant="body1" color="text.secondary">
+                    Click a plane on the map or in the list.
+                </Typography>
+            </Paper>            
+        );
+    }
+    const plane = selectedMapObject as Plane;
 
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -55,16 +66,16 @@ export const PlaneEditor = observer(function PlaneEditor() {
 
                 <Box sx={{ mb: 2 }}>
                     <Typography variant="body2" gutterBottom>
-                        Country of Origin {selectedMapObject.country}
+                        Country of Origin {plane.country}
                     </Typography>
                     <Typography variant="body2" gutterBottom>
-                        Heading {selectedMapObject.heading}
+                        Heading {plane.heading}
                     </Typography>
                     <Typography variant="body2" gutterBottom>
-                        Latitude {selectedMapObject.geoLocation.lat}
+                        Latitude {plane.geoLocation.lat}
                     </Typography>
                     <Typography variant="body2" gutterBottom>
-                        Longitude {selectedMapObject.geoLocation.lon}
+                        Longitude {plane.geoLocation.lon}
                     </Typography>
 
                 </Box>
