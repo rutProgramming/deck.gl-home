@@ -11,6 +11,7 @@ import {
 import { mapObjectsStore } from "../../store/mapObjectStore.store";
 import { renameMapObject } from "../../services/workerClient";
 import type { Plane } from "../../models/Plane";
+import PlaneUsageGuide from "./PlaneUsageGuide";
 
 export const PlaneEditor = observer(function PlaneEditor() {
     const selectedMapObject = mapObjectsStore.selectedMapObject;
@@ -19,15 +20,9 @@ export const PlaneEditor = observer(function PlaneEditor() {
     useEffect(() => {
         setEditName(selectedMapObject?.name ?? "");
     }, [selectedMapObject?.id,selectedMapObject?.name]);
-    
-     if (selectedMapObject?.type !== "plane") {
-        return (
-            <Paper elevation={3} sx={{ p: 2, textAlign: "center" }}>
-                <Typography variant="body1" color="text.secondary">
-                    Click a plane on the map or in the list.
-                </Typography>
-            </Paper>            
-        );
+
+     if (!selectedMapObject || selectedMapObject?.type !== "plane") {
+        return <PlaneUsageGuide />         
     }
     const plane = selectedMapObject as Plane;
 
@@ -37,15 +32,6 @@ export const PlaneEditor = observer(function PlaneEditor() {
         renameMapObject(selectedMapObject.id, editName);
     };
 
-    if (!selectedMapObject) {
-        return (
-            <Paper elevation={3} sx={{ p: 2, textAlign: "center" }}>
-                <Typography variant="body1" color="text.secondary">
-                    Click a plane on the map or in the list.
-                </Typography>
-            </Paper>
-        );
-    }
 
     return (
         <Paper elevation={3} sx={{ p: 3, maxWidth: 400 }}>

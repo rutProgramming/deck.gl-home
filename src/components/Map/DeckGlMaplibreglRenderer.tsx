@@ -1,5 +1,5 @@
 import { Deck } from "@deck.gl/core";
-import type { DeckIconLayerFactory,ViewState } from "./Map.type";
+import type { DeckIconLayerFactory } from "./Map.type";
 import type { IMapRenderer  } from "./IMapRenderer";
 import maplibregl from "maplibre-gl";
 import type { BBox } from "../../workers/types";
