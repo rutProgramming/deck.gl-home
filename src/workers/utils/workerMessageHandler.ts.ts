@@ -1,26 +1,26 @@
 import { broadcastData } from "../BroadcastData"
-import { planeData } from "../PlaneData"
+import { mapObjectData } from "../MapObjectData"
 import type { Message } from "../types"
-import { getPlanesInBBox } from "./geoFilter"
+import { getMapObjectsInBBox } from "./geoFilter"
 
 
-const getAllPlanes = () => {
-    return Array.from(planeData.getPlanesById().values())
+const getAllMapObjects = () => {
+    return Array.from(mapObjectData.getMapObjectsById().values())
 }
 export const handleMessage = (msg: Message) => {
     switch (msg.type) {
-        case "SET_PLANES":
-            planeData.setPlanes(msg.planes)
-            broadcastData.broadcastData(getAllPlanes(), "ALL_PLANES")
+        case "SET_MAP_OBJECTS":
+            mapObjectData.setMapObjects(msg.data)
+            broadcastData.broadcastData(getAllMapObjects(), "ALL_MAP_OBJECTS")
             break
 
-        case "VISIBLE_PLANES_RECALCULATE":
-            broadcastData.broadcastData(getPlanesInBBox(msg.bbox, planeData.getPlanesById()), "VISIBLE_PLANES")
+        case "VISIBLE_MAP_OBJECTS_RECALCULATE":
+            broadcastData.broadcastData(getMapObjectsInBBox(msg.bbox, mapObjectData.getMapObjectsById()), "VISIBLE_MAP_OBJECTS")
             break
 
-        case "RENAME_PLANE":
-            planeData.renamePlane(msg.id, msg.name)
-            broadcastData.broadcastData(getAllPlanes(), "ALL_PLANES")
+        case "RENAME_MAP_OBJECT":
+            mapObjectData.renameMapObject(msg.id, msg.name)
+            broadcastData.broadcastData(getAllMapObjects(), "ALL_MAP_OBJECTS")
             break
     }
 }

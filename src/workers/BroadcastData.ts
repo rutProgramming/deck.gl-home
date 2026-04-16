@@ -1,4 +1,4 @@
-import type { Plane } from "../planeUtils/plane.types"
+import type { MapObject } from "../models/MapObject"
 
 export interface IBroadcastData<T> {
     postMessageToAllPorts(type: string, data: T[]): void
@@ -27,4 +27,4 @@ class BroadcastData<T> implements IBroadcastData<T> {
 
 }
 
-export const broadcastData = new BroadcastData<Plane>()
+export const broadcastData = new BroadcastData<MapObject>()

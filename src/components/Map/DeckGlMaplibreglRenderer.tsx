@@ -18,6 +18,7 @@ export class DeckGlMaplibreglRenderer<T> implements IMapRenderer <T> {
     private maplibreMap?: maplibregl.Map;
     private readonly onItemClick: (id: string) => void;
     private readonly makeLayer: DeckIconLayerFactory<T>;
+    onBoundsChange?: () => void
 
     constructor(onItemClick: (id: string) => void, makeLayer: DeckIconLayerFactory<T>) {
         this.onItemClick = onItemClick;
@@ -54,6 +55,7 @@ export class DeckGlMaplibreglRenderer<T> implements IMapRenderer <T> {
                     bearing: viewState.bearing,
                     pitch: viewState.pitch,
                 });
+                this.onBoundsChange?.()
             },
         });
 

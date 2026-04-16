@@ -1,29 +1,32 @@
 [
-  {
-    "id": 1,
-    "name": "Corolla",
-    "year": 2023,
-    "geoLocation": {
-      "lat": 32.9178,
-      "lon": 34.8169
+    {
+        "id": "1",
+        "name": "Corolla",
+        "year": 2023,
+        "country": "Iran",
+        "geoLocation": {
+            "lat": 36.9178,
+            "lon": 34.8169
+        }
+    },
+    {
+        "id": "2",
+        "name": "Model 3",
+        "year": 2024,
+        "country": "Egypt",
+        "geoLocation": {
+            "lat": 34.854,
+            "lon": 33.4763
+        }
+    },
+    {
+        "id": "3",
+        "name": "F-150",
+        "year": 2022,
+        "country": "Israel",
+        "geoLocation": {
+            "lat": 38.5378,
+            "lon": 35.131
+        }
     }
-  },
-  {
-    "id": 2,
-    "name": "Model 3",
-    "year": 2024,
-    "geoLocation": {
-      "lat": 30.854,
-      "lon": 33.4763
-    }
-  },
-  {
-    "id": 3,
-    "name": "F-150",
-    "year": 2022,
-    "geoLocation": {
-      "lat": 33.5378,
-      "lon": 35.131
-    }
-  }
 ]

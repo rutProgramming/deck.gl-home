@@ -1,4 +1,4 @@
-import type { Plane } from "../planeUtils/plane.types"
+import type { MapObject } from "../models/MapObject"
 
 export type BBox = {
   west: number
@@ -8,6 +8,6 @@ export type BBox = {
 }
 
 export type Message =
-  | { type: "SET_PLANES"; planes: Plane[] }
-  | { type: "VISIBLE_PLANES_RECALCULATE"; bbox: BBox }
-  | { type: "RENAME_PLANE"; id: string; name: string }
+  | { type: "SET_MAP_OBJECTS"; data: MapObject[] }
+  | { type: "VISIBLE_MAP_OBJECTS_RECALCULATE"; bbox: BBox }
+  | { type: "RENAME_MAP_OBJECT"; id: string; name: string }

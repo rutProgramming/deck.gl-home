@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { planesStore } from "../../store/planes.store";
+import { planesStore } from "../../store/MapObjectsStore.store";
 import Box from "@mui/material/Box";
 import { DataGrid, useGridApiRef, type GridColDef, type GridRowId, type GridRowSelectionModel } from "@mui/x-data-grid";
 import { useContext, useEffect } from "react";

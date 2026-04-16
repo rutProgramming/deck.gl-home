@@ -1,3 +1,4 @@
+import type { Layer } from "@deck.gl/core";
 import type { IconLayer } from "@deck.gl/layers";
 export type ViewState = {
     longitude: number,
@@ -8,12 +9,16 @@ export type ViewState = {
 }
 
 
+// export type DeckIconLayerFactory<T> = (options: {
+//     data: T[];
+//     selectedId: string | null;
+//     onPickItem: (id: string) => void;
+// }) => IconLayer<T, {}>;
 export type DeckIconLayerFactory<T> = (options: {
     data: T[];
     selectedId: string | null;
     onPickItem: (id: string) => void;
-}) => IconLayer<T, {}>;
-
+}) => Layer[];
 
 export type MapBounds = () => {
     west: number;

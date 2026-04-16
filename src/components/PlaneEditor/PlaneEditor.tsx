@@ -1,6 +1,5 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { observer } from "mobx-react-lite";
-import { planesStore } from "../../store/planes.store";
 import {
     Box,
     Button,
@@ -9,24 +8,25 @@ import {
     Paper,
     Divider
 } from "@mui/material";
-import { renamePlane } from "../../services/workerClient";
+import { mapObjectsStore } from "../../store/mapObjectStore.store";
+import { renameMapObject } from "../../services/workerClient";
 
 export const PlaneEditor = observer(function PlaneEditor() {
-    const selectedPlane = planesStore.selectedPlane;
+    const selectedMapObject = mapObjectsStore.selectedMapObject;
 
     const [editName, setEditName] = useState("");
 
     useEffect(() => {
-        setEditName(selectedPlane?.name ?? "");
-    }, [selectedPlane?.id,selectedPlane?.name]);
+        setEditName(selectedMapObject?.name ?? "");
+    }, [selectedMapObject?.id,selectedMapObject?.name]);
 
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (!selectedPlane) return;
-        renamePlane(selectedPlane.id, editName);
+        if (!selectedMapObject) return;
+        renameMapObject(selectedMapObject.id, editName);
     };
 
-    if (!selectedPlane) {
+    if (!selectedMapObject) {
         return (
             <Paper elevation={3} sx={{ p: 2, textAlign: "center" }}>
                 <Typography variant="body1" color="text.secondary">
@@ -55,16 +55,16 @@ export const PlaneEditor = observer(function PlaneEditor() {
 
                 <Box sx={{ mb: 2 }}>
                     <Typography variant="body2" gutterBottom>
-                        Country of Origin {selectedPlane.country}
+                        Country of Origin {selectedMapObject.country}
                     </Typography>
                     <Typography variant="body2" gutterBottom>
-                        Heading {selectedPlane.heading}
+                        Heading {selectedMapObject.heading}
                     </Typography>
                     <Typography variant="body2" gutterBottom>
-                        Latitude {selectedPlane.geoLocation.lat}
+                        Latitude {selectedMapObject.geoLocation.lat}
                     </Typography>
                     <Typography variant="body2" gutterBottom>
-                        Longitude {selectedPlane.geoLocation.lon}
+                        Longitude {selectedMapObject.geoLocation.lon}
                     </Typography>
 
                 </Box>
