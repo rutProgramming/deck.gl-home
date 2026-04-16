@@ -15,7 +15,6 @@ const SELECTED_MAP_OBJECT_ALPHA = 255;
 const DEFAULT_MAP_OBJECT_ALPHA = 220;
 const SELECTED_MAP_OBJECT_SIZE = 38;
 const UNSELECTED_MAP_OBJECT_SIZE = 28;
-// const ROTATION_CORRECTION_MAP_OBJECT = 45
 const ICON_SIZE = 64;
 const ICON_ANCHOR = 32;
 
@@ -51,13 +50,6 @@ export function makeMapObjectIconLayer<T extends MapObject>(args: PropsIconLayer
     updateTriggers: {
       getSize: [selectedId],
     },
-    // getColor: (p) => {
-    //   const [r, g, b] = countryToRgb(p.country);
-
-    //   return p.id === selectedId
-    //     ? [r, g, b, SELECTED_MAP_OBJECT_ALPHA]
-    //     : [r, g, b, DEFAULT_MAP_OBJECT_ALPHA];
-    // },
     getColor: (mapObject) => {
       const rgb = getColor?.(mapObject) ?? [0, 0, 0]
       const alpha = mapObject.id === selectedId
@@ -66,7 +58,6 @@ export function makeMapObjectIconLayer<T extends MapObject>(args: PropsIconLayer
 
       return toRgbalpha(...rgb, alpha)
     },
-    // getAngle: (mapObject) => ROTATION_CORRECTION_MAP_OBJECT  - (p.heading ?? 0)
     getAngle: (mapObject) =>
       getAngle ? getAngle(mapObject) : 0,
     onClick: (info) => {

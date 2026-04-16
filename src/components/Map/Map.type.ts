@@ -8,12 +8,6 @@ export type ViewState = {
     pitch: number,
 }
 
-
-// export type DeckIconLayerFactory<T> = (options: {
-//     data: T[];
-//     selectedId: string | null;
-//     onPickItem: (id: string) => void;
-// }) => IconLayer<T, {}>;
 export type DeckIconLayerFactory<T> = (options: {
     data: T[];
     selectedId: string | null;
