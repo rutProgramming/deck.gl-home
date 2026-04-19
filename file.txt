@@ -45,3 +45,10 @@ deletegetmapinstance-V
 brodastfunction union -V
 class PlaneWorkerManager implements IPlaneWorkerManager {
 -function-V
+
+
+
+
+
+sepertation mapstore
+update spesific layer
