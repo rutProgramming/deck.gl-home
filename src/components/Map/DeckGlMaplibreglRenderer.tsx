@@ -96,13 +96,13 @@ export class DeckGlMaplibreglRenderer<T> implements IMapRenderer <T> {
     }
 };
     renderItems(data: T[], selectedId: string | null): void {        
-        const layer = this.makeLayer({
+        const layers = this.makeLayer({
             data,
             selectedId,
             onPickItem: this.onItemClick
         });
 
-        this.deck?.setProps({ layers: [layer] });
+        this.deck?.setProps({ layers: layers });
     }
    
     cleanUp(): void {

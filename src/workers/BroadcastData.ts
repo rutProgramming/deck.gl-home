@@ -2,7 +2,7 @@ import type { MapObject } from "../models/MapObject"
 
 export interface IBroadcastData<T> {
     postMessageToAllPorts(type: string, data: T[]): void
-    broadcastData(visibleData: T[], message: string): void
+    broadcastData(data: T[], message: string): void
 }
 class BroadcastData<T> implements IBroadcastData<T> {
 
@@ -20,8 +20,8 @@ class BroadcastData<T> implements IBroadcastData<T> {
         }
     }
 
-    broadcastData(visibleData: T[], message: string): void {
-        this.postMessageToAllPorts(message, visibleData)
+    broadcastData(data: T[], message: string): void {
+        this.postMessageToAllPorts(message, data)
     }
 
 }

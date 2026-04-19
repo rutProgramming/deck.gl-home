@@ -11,7 +11,7 @@ import {
 import { mapObjectsStore } from "../../store/mapObjectStore.store";
 import { renameMapObject } from "../../services/workerClient";
 import type { Plane } from "../../models/Plane";
-import SelectPlaneMessage from "./SelectPlaneMessage";
+import SelectPlaneToEdit from "./SelectPlaneToEdit";
 
 export const PlaneEditor = observer(function PlaneEditor() {
     const selectedMapObject = mapObjectsStore.selectedMapObject;
@@ -22,7 +22,7 @@ export const PlaneEditor = observer(function PlaneEditor() {
     }, [selectedMapObject?.id,selectedMapObject?.name]);
 
      if (!selectedMapObject || selectedMapObject.type !== "plane") {
-        return <SelectPlaneMessage />         
+        return <SelectPlaneToEdit />         
     }
     const plane = selectedMapObject as Plane;
 

@@ -1,6 +1,7 @@
 import { Paper, Typography } from "@mui/material";
 
-export default function SelectPlaneMessage() {
+
+export default function SelectPlaneToEdit() {
        return (
             <Paper elevation={3} sx={{ p: 2, textAlign: "center" }}>
                 <Typography variant="body1" color="text.secondary">
