@@ -14,13 +14,13 @@ class BroadcastData<T> implements IBroadcastData<T> {
         }
     }
 
-    postMessageToAllPorts(type: string, data: T[]) {
+    postMessageToAllPorts(type: string, data: Partial<T>[]) {
         for (const port of this.#ports) {
             port.postMessage({ type, data })
         }
     }
 
-    broadcastData(data: T[], message: string): void {
+    broadcastData(data: Partial<T>[], message: string): void {
         this.postMessageToAllPorts(message, data)
     }
 

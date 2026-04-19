@@ -45,4 +45,8 @@ worker.port.onmessage = (event) => {
     mapObjectsStore.setAllMapObjects(msg.data)
   }
 
+  if (msg.type === "RENAME_MAP_OBJECT") {
+    mapObjectsStore.renameMapObject(msg.data[0].id, msg.data[0].name)
+  }
+
 }

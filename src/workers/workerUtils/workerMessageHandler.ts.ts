@@ -20,7 +20,7 @@ export const handleMessage = (msg: Message) => {
 
         case "RENAME_MAP_OBJECT":
             mapObjectData.renameMapObject(msg.id, msg.name)
-            broadcastData.broadcastData(getAllMapObjects(), "ALL_MAP_OBJECTS")
+            broadcastData.broadcastData([{ id: msg.id, name: msg.name }], "RENAME_MAP_OBJECT")
             break
     }
 }

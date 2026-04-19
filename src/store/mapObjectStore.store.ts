@@ -26,6 +26,12 @@ export class MapObjectsStore<T extends MapObject> {
     MapObjects.forEach(MapObject => this.allMapObjectsById.set(MapObject.id, MapObject));
     this.clearSelectedMapObjectIfMissing();
   }
+  renameMapObject(id: string, name: string) {
+    const MapObject = this.allMapObjectsById.get(id)
+    if (!MapObject) return;
+    MapObject.name = name
+    this.allMapObjectsById.set(id, MapObject)
+  }
 
   selectMapObject(id: string | null) {
     this.selectedMapObjectId = id;
