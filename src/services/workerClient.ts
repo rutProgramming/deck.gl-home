@@ -1,6 +1,7 @@
 import Worker from "../workers/worker.ts?sharedworker"
 import type { MapObject } from "../models/MapObject"
-import { mapObjectsStore } from "../store/mapObjectStore.store"
+import { mapStore, type ObjectType } from "../Store/Mapstore"
+import type { Target } from "../workers/types"
 
 type BBox = {
   west: number
@@ -12,41 +13,44 @@ type BBox = {
 const worker = new Worker()
 worker.port.start()
 
-export function setMapObjects(mapObjects: MapObject[]) {
+export function setMapObjects(mapObjects: MapObject[], target: Target) {
   worker.port.postMessage({
     type: "SET_MAP_OBJECTS",
-    data: mapObjects
+    data: mapObjects,
+    target
   })
 }
 
-export function visibleMapObjectsRecalculate(bbox: BBox) {
+export function visibleMapObjectsRecalculate(bbox: BBox, target: Target) {
   worker.port.postMessage({
     type: "VISIBLE_MAP_OBJECTS_RECALCULATE",
-    bbox
+    bbox,
+    target
   })
 }
 
-export function renameMapObject(id: string, name: string) {
+export function renameMapObject(id: string, name: string, target: ObjectType) {
   worker.port.postMessage({
     type: "RENAME_MAP_OBJECT",
     id,
-    name
+    name,
+    target
   })
 }
 
 worker.port.onmessage = (event) => {  
   const msg = event.data
   
-  if (msg.type === "VISIBLE_MAP_OBJECTS") {    
-    mapObjectsStore.setVisibleMapObjects(msg.data)
+  if (msg.message === "VISIBLE_MAP_OBJECTS") {    
+    mapStore.getStore(msg.target).setVisibleMapObjects(msg.data)
   }
 
-  if (msg.type === "ALL_MAP_OBJECTS") {
-    mapObjectsStore.setAllMapObjects(msg.data)
+  if (msg.message === "ALL_MAP_OBJECTS") {
+    mapStore.getStore(msg.target).setAllMapObjects(msg.data)
   }
 
-  if (msg.type === "ON_RENAME_MAP_OBJECT") {
-    mapObjectsStore.renameMapObject(msg.data[0].id, msg.data[0].name)
+  if (msg.message === "ON_RENAME_MAP_OBJECT") {
+    mapStore.getStore(msg.target).renameMapObject(msg.data[0].id, msg.data[0].name)
   }
 
 }

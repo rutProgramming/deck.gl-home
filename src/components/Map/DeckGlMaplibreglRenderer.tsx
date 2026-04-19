@@ -1,6 +1,6 @@
 import { Deck } from "@deck.gl/core";
 import type { DeckIconLayerFactory } from "./Map.type";
-import type { IMapRenderer  } from "./IMapRenderer";
+import type { IMapRenderer, LayerData } from "./IMapRenderer";
 import maplibregl from "maplibre-gl";
 import type { BBox } from "../../workers/types";
 
@@ -13,7 +13,7 @@ const INITIAL_VIEW_STATE = {
     pitch: 0,
 };
 
-export class DeckGlMaplibreglRenderer<T> implements IMapRenderer <T> {
+export class DeckGlMaplibreglRenderer<T> implements IMapRenderer<T> {
     private deck?: Deck;
     private maplibreMap?: maplibregl.Map;
     private readonly onItemClick: (id: string) => void;
@@ -61,40 +61,40 @@ export class DeckGlMaplibreglRenderer<T> implements IMapRenderer <T> {
     }
 
     getBounds(): BBox | null {
-    if (!this.maplibreMap) {
-        return null
+        if (!this.maplibreMap) {
+            return null
+        }
+
+        const bounds = this.maplibreMap.getBounds();
+
+        return {
+            west: bounds.getWest(),
+            east: bounds.getEast(),
+            north: bounds.getNorth(),
+            south: bounds.getSouth()
+        };
     }
+    flyToLocation = (lat: number, lon: number): void => {
+        if (!this.maplibreMap || !this.deck) return;
 
-    const bounds = this.maplibreMap.getBounds();
+        const bounds = this.maplibreMap.getBounds();
+        const visible = lon >= bounds.getWest() && lon <= bounds.getEast()
+            && lat >= bounds.getSouth() && lat <= bounds.getNorth();
 
-    return {
-        west: bounds.getWest(),
-        east: bounds.getEast(),
-        north: bounds.getNorth(),
-        south: bounds.getSouth()
+        if (!visible) {
+            this.deck.setProps({
+                viewState: {
+                    longitude: lon,
+                    latitude: lat,
+                    zoom: Math.max(this.maplibreMap.getZoom(), 8),
+                    bearing: 0,
+                    pitch: 0,
+                    transitionDuration: 800,
+                }
+            });
+        }
     };
-}
-   flyToLocation = (lat: number, lon: number): void => {
-    if (!this.maplibreMap || !this.deck) return;
-
-    const bounds = this.maplibreMap.getBounds();
-    const visible = lon >= bounds.getWest() && lon <= bounds.getEast()
-        && lat >= bounds.getSouth() && lat <= bounds.getNorth();
-
-    if (!visible) {
-        this.deck.setProps({
-            viewState: {
-                longitude: lon,
-                latitude: lat,
-                zoom: Math.max(this.maplibreMap.getZoom(), 8),
-                bearing: 0,
-                pitch: 0,
-                transitionDuration: 800,
-            }
-        });
-    }
-};
-    renderItems(data: T[], selectedId: string | null): void {        
+    renderItems(data: T, selectedId: string | null): void {
         const layers = this.makeLayer({
             data,
             selectedId,
@@ -103,7 +103,11 @@ export class DeckGlMaplibreglRenderer<T> implements IMapRenderer <T> {
 
         this.deck?.setProps({ layers: layers });
     }
-   
+    // renderItems(objects: T) {
+    //     const layers = this.makeLayer(objects);
+    //     this.deck?.setProps({ layers });
+    // }
+
     cleanUp(): void {
         this.deck?.finalize();
         this.maplibreMap?.remove();

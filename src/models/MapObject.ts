@@ -8,5 +8,4 @@ export interface MapObject {
   name: string
   country: string
   geoLocation: GeoLocation
-  type: string
 }

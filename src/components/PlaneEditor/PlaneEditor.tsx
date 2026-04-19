@@ -8,28 +8,25 @@ import {
     Paper,
     Divider
 } from "@mui/material";
-import { mapObjectsStore } from "../../store/mapObjectStore.store";
-import { renameMapObject } from "../../services/workerClient";
-import type { Plane } from "../../models/Plane";
 import SelectPlaneToEdit from "./SelectPlaneToEdit";
+import { mapStore } from "../../Store/Mapstore";
 
-export const PlaneEditor = observer(function PlaneEditor() {
-    const selectedMapObject = mapObjectsStore.selectedMapObject;
+export const PlaneEditor = observer(function PlaneEditor() {    
+    const selectedPlane = mapStore.selectedMapObject;
     const [editName, setEditName] = useState("");
 
     useEffect(() => {
-        setEditName(selectedMapObject?.name ?? "");
-    }, [selectedMapObject?.id,selectedMapObject?.name]);
+        setEditName(selectedPlane?.name ?? "");
+    }, [selectedPlane?.id,selectedPlane?.name]);
 
-     if (!selectedMapObject || selectedMapObject.type !== "plane") {
+     if (!selectedPlane) {
         return <SelectPlaneToEdit />         
     }
-    const plane = selectedMapObject as Plane;
 
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (!plane) return;
-        renameMapObject(plane.id, editName);
+        if (!selectedPlane) return;
+        mapStore.planeStore.renameMapObject(selectedPlane.id, editName);
     };
 
 
@@ -52,21 +49,20 @@ export const PlaneEditor = observer(function PlaneEditor() {
 
                 <Box sx={{ mb: 2 }}>
                     <Typography variant="body2" gutterBottom>
-                        Country of Origin {plane.country}
+                        Country of Origin {selectedPlane.country}
                     </Typography>
                     <Typography variant="body2" gutterBottom>
-                        Heading {plane.heading}
                     </Typography>
                     <Typography variant="body2" gutterBottom>
-                        Latitude {plane.geoLocation.lat}
+                        Latitude {selectedPlane.geoLocation.lat}
                     </Typography>
                     <Typography variant="body2" gutterBottom>
-                        Longitude {plane.geoLocation.lon}
+                        Longitude {selectedPlane.geoLocation.lon}
                     </Typography>
 
                 </Box>
 
-                <Button type="submit" variant="contained" fullWidth disabled={editName === plane.name}>
+                <Button type="submit" variant="contained" fullWidth disabled={editName === selectedPlane.name}>
                     Save
                 </Button>
             </Box>

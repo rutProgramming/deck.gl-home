@@ -1,7 +1,8 @@
 import type { Layer } from "@deck.gl/core";
+import type { LayerData } from "./IMapRenderer";
 
 export type DeckIconLayerFactory<T> = (options: {
-    data: T[];
+    data: T;
     selectedId: string | null;
     onPickItem: (id: string) => void;
 }) => Layer[];

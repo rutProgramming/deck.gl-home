@@ -18,23 +18,21 @@ const darkTheme = createTheme({
 
 export function App() {
   useEffect(() => {
-  const planes = planesData.map(p => ({ ...p, type: "plane" }))
-  const cars = carsData.map(c => ({ ...c, type: "car" }))
-  
-  setMapObjects([...planes, ...cars, ])
+    setMapObjects(planesData, "plane")
+    setMapObjects(carsData, "car")
   }, [])
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
       <MapRendererContext.Provider value={mapRenderer}>
-          <Box style={{ width: "100vw", height: "100vh", position: "relative" }}>
-            <Map />
-            <Box style={{ position: "absolute", top: 16, right: 100, zIndex: 10 }}>
-                <PlaneEditor />
-            </Box>
-            <Box style={{ position: "absolute", bottom: 16, left: 100, zIndex: 10 }}>
-                <PlanesPanel />
-            </Box>
+        <Box style={{ width: "100vw", height: "100vh", position: "relative" }}>
+          <Map />
+          <Box style={{ position: "absolute", top: 16, right: 100, zIndex: 10 }}>
+            <PlaneEditor />
+          </Box>
+          <Box style={{ position: "absolute", bottom: 16, left: 100, zIndex: 10 }}>
+            <PlanesPanel />
+          </Box>
         </Box>
       </MapRendererContext.Provider>
     </ThemeProvider>

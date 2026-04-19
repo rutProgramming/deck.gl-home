@@ -3,15 +3,14 @@ import Box from "@mui/material/Box";
 import { DataGrid, useGridApiRef, type GridColDef, type GridRowId, type GridRowSelectionModel } from "@mui/x-data-grid";
 import { useContext, useEffect } from "react";
 import { MapRendererContext } from "../Map/IMapRenderer";
-import { mapObjectsStore } from "../../store/mapObjectStore.store";
+import { mapStore } from "../../Store/Mapstore";
 
 export const PlanesPanel = observer(function PlanesPanel() {
   const apiRef = useGridApiRef();
   const rendererMap = useContext(MapRendererContext);
 
  const rows = Array
-  .from(mapObjectsStore.allMapObjects.values())
-  .filter(obj => obj.type === "plane")
+  .from(mapStore.planeStore.allMapObjects.values())
   .map((plane) => ({
     id: plane.id,
     name: plane.name,
@@ -27,20 +26,20 @@ export const PlanesPanel = observer(function PlanesPanel() {
 
   const selectionModel: GridRowSelectionModel = {
     type: "include",
-    ids: mapObjectsStore.selectedMapObject ? new Set<GridRowId>([mapObjectsStore.selectedMapObject.id]) : new Set(),
+    ids: mapStore.selectedMapObject ? new Set<GridRowId>([mapStore.selectedMapObject.id]) : new Set(),
   };
 
 
   const handleRowSelectionChange = (model: GridRowSelectionModel) => {
     const selectedIds = Array.from(model.ids).filter((id): id is string => typeof id === "string");
-    mapObjectsStore.selectMapObject(selectedIds[0] ?? null);
-    if (rendererMap && mapObjectsStore.selectedMapObject) {
-      rendererMap.flyToLocation(mapObjectsStore.selectedMapObject.geoLocation.lat, mapObjectsStore.selectedMapObject.geoLocation.lon);
+    mapStore.selectMapObject(selectedIds[0] ?? null);
+    if (rendererMap && mapStore.selectedMapObject) {
+      rendererMap.flyToLocation(mapStore.selectedMapObject.geoLocation.lat, mapStore.selectedMapObject.geoLocation.lon);
     }
 
   };
   useEffect(() => {
-    const id = mapObjectsStore.selectedMapObject?.id;
+    const id = mapStore.selectedMapObject?.id;
     if (!id || !apiRef.current) return;
     const rowIndex = rows.findIndex((row) => row.id === id);
     if (rowIndex === -1) return;
@@ -50,7 +49,7 @@ export const PlanesPanel = observer(function PlanesPanel() {
     apiRef.current.setPage(page);
     apiRef.current?.scrollToIndexes({ rowIndex });
 
-  }, [mapObjectsStore.selectedMapObject?.id]);
+  }, [mapStore.selectedMapObject?.id]);
   return (
     <Box
       sx={{

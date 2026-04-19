@@ -52,3 +52,6 @@ class PlaneWorkerManager implements IPlaneWorkerManager {
 
 sepertation mapstore
 update spesific layer
+
+
+visibleMapObjectsRecalculate-check

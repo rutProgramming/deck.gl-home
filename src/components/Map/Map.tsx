@@ -3,12 +3,15 @@ import { reaction } from "mobx";
 import { MapRendererContext } from "./IMapRenderer";
 import { Box } from "@mui/material";
 import { visibleMapObjectsRecalculate } from "../../services/workerClient";
-import { mapObjectsStore } from "../../store/mapObjectStore.store";
+import { mapStore } from "../../Store/Mapstore";
+import type { Target } from "../../workers/types";
 
 
 export function Map() {
     const mapContainerRef = useRef<HTMLDivElement | null>(null);
     const mapRenderer = useContext(MapRendererContext);
+
+    const targets:Target= 'all'
     const updateMapBounds = () => {
         if (!mapRenderer) return;
         const bounds = mapRenderer.getBounds();
@@ -19,25 +22,27 @@ export function Map() {
             east: bounds.east,
             north: bounds.north,
             south: bounds.south,
-        });
+        }, targets);
+               
     };
+
 
     useEffect(() => {
         if (!mapContainerRef.current || !mapRenderer) {
             return;
         };
-        mapRenderer.onBoundsChange = updateMapBounds 
+        mapRenderer.onBoundsChange = updateMapBounds
         mapRenderer.attach(mapContainerRef.current);
         updateMapBounds();
 
+
         const disposeLayerReactionRef = reaction(
-            () => ({ mapObjects: mapObjectsStore.visibleMapObjects, selectedId: mapObjectsStore.selectedMapObjectId }),
-            ({ mapObjects, selectedId }) => {
-                mapRenderer.renderItems(mapObjects, selectedId)
+            () => mapStore.getLayerData(),
+            (layerData) => {
+                mapRenderer.renderItems(layerData, mapStore.selectedMapObjectId);
             },
             { fireImmediately: true }
         );
-
         return () => {
             mapRenderer.cleanUp();
             disposeLayerReactionRef();
