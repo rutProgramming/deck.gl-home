@@ -42,7 +42,6 @@ export class DeckGlMaplibreglRenderer<T> implements IMapRenderer <T> {
                 top: "0",
                 left: "0",
                 zIndex: "10",
-                pointerEvents: "none",
             },
             initialViewState: INITIAL_VIEW_STATE,
             controller: true,
