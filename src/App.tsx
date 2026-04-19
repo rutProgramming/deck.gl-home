@@ -18,8 +18,8 @@ const darkTheme = createTheme({
 
 export function App() {
   useEffect(() => {
-  const planes = planesData.map(p => ({ ...p, type: "plane" as const }))
-  const cars = carsData.map(c => ({ ...c, id: String(c.id), type: "car" as const }))
+  const planes = planesData.map(p => ({ ...p, type: "plane" }))
+  const cars = carsData.map(c => ({ ...c, type: "car" }))
   
   setMapObjects([...planes, ...cars, ])
   }, [])

@@ -1,7 +1,7 @@
 import { broadcastData } from "../BroadcastData"
 import { mapObjectData } from "../MapObjectData"
 import type { Message } from "../types"
-import { getMapObjectsInBBox } from "./geoFilter"
+import { getMapObjectsInBBox } from "./mapObjectsFilter"
 
 
 const getAllMapObjects = () => {

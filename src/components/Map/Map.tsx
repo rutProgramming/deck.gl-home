@@ -26,8 +26,8 @@ export function Map() {
         if (!mapContainerRef.current || !mapRenderer) {
             return;
         };
-        mapRenderer.attach(mapContainerRef.current);
         mapRenderer.onBoundsChange = updateMapBounds 
+        mapRenderer.attach(mapContainerRef.current);
         updateMapBounds();
 
         const disposeLayerReactionRef = reaction(

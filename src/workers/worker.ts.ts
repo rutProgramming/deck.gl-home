@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
 import { broadcastData } from "./BroadcastData.ts"
-import { handleMessage } from "./utils/workerMessageHandler.ts.ts"
+import { handleMessage } from "./workerUtils/workerMessageHandler.ts.ts"
 import type { Message } from "./types.ts"
 
 export { }
