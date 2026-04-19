@@ -58,8 +58,7 @@ export function makeMapObjectIconLayer<T extends MapObject>(args: PropsIconLayer
 
       return toRgbalpha(...rgb, alpha)
     },
-    getAngle: (mapObject) =>
-      getAngle ? getAngle(mapObject) : 0,
+    getAngle: (mapObject) => getAngle ? getAngle(mapObject) : 0,
     onClick: (info) => {
       const mapObject = info.object;
       if (mapObject?.id) onPick(mapObject.id);

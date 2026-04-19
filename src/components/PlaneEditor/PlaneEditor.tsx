@@ -11,7 +11,7 @@ import {
 import { mapObjectsStore } from "../../store/mapObjectStore.store";
 import { renameMapObject } from "../../services/workerClient";
 import type { Plane } from "../../models/Plane";
-import PlaneUsageGuide from "./PlaneUsageGuide";
+import SelectPlaneMessage from "./SelectPlaneMessage";
 
 export const PlaneEditor = observer(function PlaneEditor() {
     const selectedMapObject = mapObjectsStore.selectedMapObject;
@@ -21,15 +21,15 @@ export const PlaneEditor = observer(function PlaneEditor() {
         setEditName(selectedMapObject?.name ?? "");
     }, [selectedMapObject?.id,selectedMapObject?.name]);
 
-     if (!selectedMapObject || selectedMapObject?.type !== "plane") {
-        return <PlaneUsageGuide />         
+     if (!selectedMapObject || selectedMapObject.type !== "plane") {
+        return <SelectPlaneMessage />         
     }
     const plane = selectedMapObject as Plane;
 
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (!selectedMapObject) return;
-        renameMapObject(selectedMapObject.id, editName);
+        if (!plane) return;
+        renameMapObject(plane.id, editName);
     };
 
 
@@ -66,7 +66,7 @@ export const PlaneEditor = observer(function PlaneEditor() {
 
                 </Box>
 
-                <Button type="submit" variant="contained" fullWidth>
+                <Button type="submit" variant="contained" fullWidth disabled={editName === plane.name}>
                     Save
                 </Button>
             </Box>

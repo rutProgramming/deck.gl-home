@@ -42,9 +42,7 @@ export const PlanesPanel = observer(function PlanesPanel() {
   useEffect(() => {
     const id = mapObjectsStore.selectedMapObject?.id;
     if (!id || !apiRef.current) return;
-
-    const rowIndex = Array.from(mapObjectsStore.allMapObjects.values()).findIndex((row) => row.id === id);
-
+    const rowIndex = rows.findIndex((row) => row.id === id);
     if (rowIndex === -1) return;
     const pageSize = 5;
     const page = Math.floor(rowIndex / pageSize);
