@@ -1,6 +1,6 @@
 import { Deck } from "@deck.gl/core";
 import type { DeckIconLayerFactory } from "./Map.type";
-import type { IMapRenderer, LayerData } from "./IMapRenderer";
+import type { IMapRenderer } from "./IMapRenderer";
 import maplibregl from "maplibre-gl";
 import type { BBox } from "../../workers/types";
 
@@ -103,10 +103,6 @@ export class DeckGlMaplibreglRenderer<T> implements IMapRenderer<T> {
 
         this.deck?.setProps({ layers: layers });
     }
-    // renderItems(objects: T) {
-    //     const layers = this.makeLayer(objects);
-    //     this.deck?.setProps({ layers });
-    // }
 
     cleanUp(): void {
         this.deck?.finalize();

@@ -1,5 +1,4 @@
 import type { Layer } from "@deck.gl/core";
-import type { LayerData } from "./IMapRenderer";
 
 export type DeckIconLayerFactory<T> = (options: {
     data: T;

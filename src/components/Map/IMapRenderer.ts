@@ -4,7 +4,6 @@ import plane from "../../assets/PM.png";
 import car from "../../assets/car.png";
 import { createContext } from "react";
 import type { BBox } from "../../workers/types";
-import type { MapObject } from "../../models/MapObject";
 import type { Plane } from "../../models/Plane";
 import { countryToRgb } from "../../planeUtils/plane.color";
 import type { Car } from "../../models/Car";
@@ -12,7 +11,6 @@ import { mapStore } from "../../Store/Mapstore";
 
 export interface IMapRenderer<T>{
     attach(container: HTMLDivElement): void;
-    // renderItems(cars: Car[], planes: Plane[], selectedId: string | null): void;
     renderItems(data:T, selectedId: string | null): void;
     getBounds(): BBox | null
     onBoundsChange?: () => void

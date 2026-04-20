@@ -12,18 +12,8 @@ export class MapObjectsStore<T extends MapObject> {
   setVisibleMapObjects(MapObjects: T[]) {
     this.visibleMapObjects = MapObjects;
   }
-
-  // private clearSelectedMapObjectIfMissing() {
-  //   if (
-  //     this.selectedMapObjectId &&
-  //     !this.allMapObjectsById.has(this.selectedMapObjectId)
-  //   ) {
-  //     this.selectedMapObjectId = null;
-  //   }
-  // }
   setAllMapObjects(MapObjects: T[]) {
     MapObjects.forEach(MapObject => this.allMapObjectsById.set(MapObject.id, MapObject));
-    // this.clearSelectedMapObjectIfMissing();
   }
   renameMapObject(id: string, name: string) {
     const MapObject = this.allMapObjectsById.get(id)
@@ -32,7 +22,6 @@ export class MapObjectsStore<T extends MapObject> {
     this.allMapObjectsById.set(id, MapObject)
   }
 
-  
   get allMapObjects(): T[] {
     return Array.from(this.allMapObjectsById.values());
   }

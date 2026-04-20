@@ -11,7 +11,7 @@ export function Map() {
     const mapContainerRef = useRef<HTMLDivElement | null>(null);
     const mapRenderer = useContext(MapRendererContext);
 
-    const targets:Target= 'all'
+    const targets: Target = 'all'
     const updateMapBounds = () => {
         if (!mapRenderer) return;
         const bounds = mapRenderer.getBounds();
@@ -23,7 +23,7 @@ export function Map() {
             north: bounds.north,
             south: bounds.south,
         }, targets);
-               
+
     };
 
 
@@ -37,9 +37,12 @@ export function Map() {
 
 
         const disposeLayerReactionRef = reaction(
-            () => mapStore.getLayerData(),
-            (layerData) => {
-                mapRenderer.renderItems(layerData, mapStore.selectedMapObjectId);
+            () => ({
+                layerData: mapStore.getLayerData(),
+                selectedId: mapStore.selectedMapObjectId,
+            }),
+            ({layerData, selectedId}) => {
+                mapRenderer.renderItems(layerData, selectedId);
             },
             { fireImmediately: true }
         );
