@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import { DataGrid, useGridApiRef, type GridColDef, type GridRowId, type GridRowSelectionModel } from "@mui/x-data-grid";
 import { useContext, useEffect } from "react";
 import { MapRendererContext } from "../Map/IMapRenderer";
-import { mapStore } from "../../Store/Mapstore";
+import { mapStore } from "../../store/mapstore";
 
 export const PlanesPanel = observer(function PlanesPanel() {
   const apiRef = useGridApiRef();
@@ -26,20 +26,20 @@ export const PlanesPanel = observer(function PlanesPanel() {
 
   const selectionModel: GridRowSelectionModel = {
     type: "include",
-    ids: mapStore.selectedMapObject ? new Set<GridRowId>([mapStore.selectedMapObject.id]) : new Set(),
+    ids: mapStore.planeStore.selectedPlane ? new Set<GridRowId>([mapStore.planeStore.selectedPlane.id]) : new Set(),
   };
 
 
   const handleRowSelectionChange = (model: GridRowSelectionModel) => {
     const selectedIds = Array.from(model.ids).filter((id): id is string => typeof id === "string");
-    mapStore.selectMapObject(selectedIds[0] ?? null);
-    if (rendererMap && mapStore.selectedMapObject) {
-      rendererMap.flyToLocation(mapStore.selectedMapObject.geoLocation.lat, mapStore.selectedMapObject.geoLocation.lon);
+    mapStore.planeStore.selectPlane(selectedIds[0] ?? null);
+    if (rendererMap && mapStore.planeStore.selectedPlane) {
+      rendererMap.flyToLocation(mapStore.planeStore.selectedPlane.geoLocation.lat, mapStore.planeStore.selectedPlane.geoLocation.lon);
     }
 
   };
   useEffect(() => {
-    const id = mapStore.selectedMapObject?.id;
+    const id = mapStore.planeStore.selectedPlane?.id;
     if (!id || !apiRef.current) return;
     const rowIndex = rows.findIndex((row) => row.id === id);
     if (rowIndex === -1) return;
@@ -49,7 +49,7 @@ export const PlanesPanel = observer(function PlanesPanel() {
     apiRef.current.setPage(page);
     apiRef.current?.scrollToIndexes({ rowIndex });
 
-  }, [mapStore.selectedMapObject?.id]);
+  }, [mapStore.planeStore.selectedPlane?.id]);
   return (
     <Box
       sx={{

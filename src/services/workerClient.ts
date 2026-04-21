@@ -1,6 +1,6 @@
 import Worker from "../workers/worker.ts?sharedworker"
 import type { MapObject } from "../models/MapObject"
-import { mapStore, type ObjectType } from "../Store/Mapstore"
+import { mapStore, type ObjectType } from "../store/mapstore"
 import type { Target } from "../workers/types"
 
 type BBox = {

@@ -7,7 +7,7 @@ import { mapRenderer, MapRendererContext } from './components/Map/IMapRenderer';
 import { Box } from '@mui/material';
 import { PlaneEditor } from './components/PlaneEditor/PlaneEditor';
 import { PlanesPanel } from './components/PlanesPanel/PlanesPanel';
-import { Map } from './components/Map/Map';
+import {  MapView } from './components/Map/MapView';
 import { setMapObjects } from './services/workerClient';
 
 const darkTheme = createTheme({
@@ -26,7 +26,7 @@ export function App() {
       <CssBaseline />
       <MapRendererContext.Provider value={mapRenderer}>
         <Box style={{ width: "100vw", height: "100vh", position: "relative" }}>
-          <Map />
+          <MapView />
           <Box style={{ position: "absolute", top: 16, right: 100, zIndex: 10 }}>
             <PlaneEditor />
           </Box>

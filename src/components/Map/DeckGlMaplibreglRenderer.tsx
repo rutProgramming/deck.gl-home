@@ -1,5 +1,4 @@
-import { Deck } from "@deck.gl/core";
-import type { DeckIconLayerFactory } from "./Map.type";
+import { Deck, Layer } from "@deck.gl/core";
 import type { IMapRenderer } from "./IMapRenderer";
 import maplibregl from "maplibre-gl";
 import type { BBox } from "../../workers/types";
@@ -13,17 +12,10 @@ const INITIAL_VIEW_STATE = {
     pitch: 0,
 };
 
-export class DeckGlMaplibreglRenderer<T> implements IMapRenderer<T> {
+export class DeckGlMaplibreglRenderer implements IMapRenderer{
     private deck?: Deck;
     private maplibreMap?: maplibregl.Map;
-    private readonly onItemClick: (id: string) => void;
-    private readonly makeLayer: DeckIconLayerFactory<T>;
     onBoundsChange?: () => void
-
-    constructor(onItemClick: (id: string) => void, makeLayer: DeckIconLayerFactory<T>) {
-        this.onItemClick = onItemClick;
-        this.makeLayer = makeLayer;
-    }
 
     attach(container: HTMLDivElement): void {
         this.maplibreMap = new maplibregl.Map({
@@ -59,7 +51,6 @@ export class DeckGlMaplibreglRenderer<T> implements IMapRenderer<T> {
         });
 
     }
-
     getBounds(): BBox | null {
         if (!this.maplibreMap) {
             return null
@@ -94,16 +85,9 @@ export class DeckGlMaplibreglRenderer<T> implements IMapRenderer<T> {
             });
         }
     };
-    renderItems(data: T, selectedId: string | null): void {
-        const layers = this.makeLayer({
-            data,
-            selectedId,
-            onPickItem: this.onItemClick
-        });
-
-        this.deck?.setProps({ layers: layers });
+    renderLayers(layers: Layer[]): void {
+        this.deck?.setProps({ layers });
     }
-
     cleanUp(): void {
         this.deck?.finalize();
         this.maplibreMap?.remove();

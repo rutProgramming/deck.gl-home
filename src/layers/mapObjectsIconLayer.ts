@@ -4,9 +4,9 @@ import type { MapObject } from "../models/MapObject";
 export type PropsIconLayer<T extends MapObject> = {
   id?: string;
   data: T[];
-  selectedId: string | null;
+  selectedId?: string | null;
   iconAtlas: string;
-  onPick: (id: string) => void;
+  onPick?: (id: string) => void;
   getAngle?: (item: T) => number;
   getColor?: (item: T) => [number, number, number];
 };
@@ -28,8 +28,9 @@ function toRgbalpha(
 }
 export function makeMapObjectIconLayer<T extends MapObject>(args: PropsIconLayer<T>) {
 
-  const { data, selectedId, iconAtlas, onPick, getAngle, getColor } = args;
-
+  const { data, selectedId, iconAtlas, onPick, getAngle, getColor } = args;  
+  console.log(args);
+  
   return new IconLayer<T>({
     id: args.id ?? "icon-layer",
     data,
@@ -46,10 +47,11 @@ export function makeMapObjectIconLayer<T extends MapObject>(args: PropsIconLayer
     }),
 
     getPosition: (mapObject) => [mapObject.geoLocation.lon, mapObject.geoLocation.lat],
-    getSize: (mapObject) => (mapObject.id === selectedId ? SELECTED_MAP_OBJECT_SIZE : UNSELECTED_MAP_OBJECT_SIZE),
-    updateTriggers: {
-      getSize: [selectedId],
-    },
+    getSize: (mapObject) =>
+      selectedId && mapObject.id === selectedId
+        ? SELECTED_MAP_OBJECT_SIZE
+        : UNSELECTED_MAP_OBJECT_SIZE,
+
     getColor: (mapObject) => {
       const rgb = getColor?.(mapObject) ?? [0, 0, 0]
       const alpha = mapObject.id === selectedId
@@ -58,10 +60,14 @@ export function makeMapObjectIconLayer<T extends MapObject>(args: PropsIconLayer
 
       return toRgbalpha(...rgb, alpha)
     },
+    updateTriggers: {
+      getSize: [selectedId],
+      getColor: [selectedId],
+    },
     getAngle: (mapObject) => getAngle ? getAngle(mapObject) : 0,
     onClick: (info) => {
       const mapObject = info.object;
-      if (mapObject?.id) onPick(mapObject.id);
+      if (mapObject?.id) onPick?.(mapObject.id);
     },
   });
 }

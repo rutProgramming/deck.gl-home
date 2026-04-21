@@ -9,10 +9,10 @@ import {
     Divider
 } from "@mui/material";
 import SelectPlaneToEdit from "./SelectPlaneToEdit";
-import { mapStore } from "../../Store/Mapstore";
+import { mapStore } from "../../store/mapstore";
 
 export const PlaneEditor = observer(function PlaneEditor() {    
-    const selectedPlane = mapStore.selectedMapObject;
+    const selectedPlane = mapStore.planeStore.selectedPlane;
     const [editName, setEditName] = useState("");
 
     useEffect(() => {
