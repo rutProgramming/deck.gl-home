@@ -4,6 +4,7 @@ import type { Plane } from "../../models/Plane";
 import { countryToRgb } from "../../planeUtils/plane.color";
 import plane from "../../assets/PM.png";
 import car from "../../assets/car.png";
+import { mapStore } from "../../store/mapstore";
 
 export const makeCarLayer = (data: Car[]) =>
     makeMapObjectIconLayer<Car>({
@@ -22,3 +23,5 @@ export const makePlaneLayer = (data: Plane[], selectedId: string | null, onPickI
         getAngle: (item) => item.heading ?? 0,
         getColor: (item) => countryToRgb(item.country),
     });
+
+

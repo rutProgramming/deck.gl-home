@@ -85,7 +85,7 @@ export class DeckGlMaplibreglRenderer implements IMapRenderer{
             });
         }
     };
-    renderLayers(layers: Layer[]): void {
+    renderLayers(layers: Layer[]): void {        
         this.deck?.setProps({ layers });
     }
     cleanUp(): void {
