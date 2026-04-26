@@ -6,6 +6,7 @@ import { visibleMapObjectsRecalculate } from "../../services/workerClient";
 import { mapStore } from "../../store/mapstore";
 import type { Target } from "../../workers/types";
 import { makeCarLayer, makePlaneLayer } from "./layerFactories";
+import { buildLayers } from "./buildLayers";
 
 
 export function MapView() {
@@ -27,17 +28,7 @@ export function MapView() {
 
     };
 
-    function buildLayers() {
-        return [
-            makeCarLayer(mapStore.carStore.visibleMapObjects),
-
-            makePlaneLayer(
-                mapStore.planeStore.visibleMapObjects,
-                mapStore.planeStore.selectedId,
-                (id) => mapStore.planeStore.selectPlane(id)
-            ),
-        ];
-    }
+   
 
 
     useEffect(() => {

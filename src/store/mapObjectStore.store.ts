@@ -35,6 +35,7 @@ export class MapObjectsStore<T extends MapObject> {
   allMapObjectsById = new Map<string, T>();
   visibleMapObjects: T[] = [];
 
+
   constructor() {
     makeObservable(this, {
       allMapObjectsById: observable,

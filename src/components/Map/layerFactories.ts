@@ -4,7 +4,6 @@ import type { Plane } from "../../models/Plane";
 import { countryToRgb } from "../../planeUtils/plane.color";
 import plane from "../../assets/PM.png";
 import car from "../../assets/car.png";
-import { mapStore } from "../../store/mapstore";
 
 export const makeCarLayer = (data: Car[]) =>
     makeMapObjectIconLayer<Car>({
