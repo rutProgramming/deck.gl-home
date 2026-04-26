@@ -1,8 +1,6 @@
 import { DeckGlMaplibreglRenderer } from "./DeckGlMaplibreglRenderer";
 import { createContext } from "react";
 import type { BBox } from "../../workers/types";
-import type { Plane } from "../../models/Plane";
-import type { Car } from "../../models/Car";
 import type { Layer } from "@deck.gl/core";
 
 export interface IMapRenderer{
@@ -12,11 +10,6 @@ export interface IMapRenderer{
     onBoundsChange?: () => void
     cleanUp(): void;
     flyToLocation(lat: number, lon: number): void;
-}
-
-export type LayerData = {
-    cars: Car[];
-    planes: Plane[];
 }
 
 export const mapRenderer = new DeckGlMaplibreglRenderer();

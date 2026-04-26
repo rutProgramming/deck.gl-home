@@ -24,24 +24,24 @@ import { MapObjectsStore } from "./mapObjectStore.store";
 import type { Plane } from "../models/Plane";
 
 export class PlaneStore extends MapObjectsStore<Plane> {
-  selectedId: string | null = null;
+    selectedId: string | null = null;
 
-  constructor() {
-    super();
+    constructor() {
+        super();
 
-    makeObservable(this, {
-      selectedId: observable,
-      selectPlane: action,
-      selectedPlane: computed,
-    });
-  }
+        makeObservable(this, {
+            selectedId: observable,
+            selectPlane: action,
+            selectedPlane: computed,
+        });
+    }
 
-  selectPlane(id: string | null) {
-    this.selectedId = id;
-  }
+    selectPlane(id: string | null) {
+        this.selectedId = id;
+    }
 
-  get selectedPlane(): Plane | null {
-    if (this.selectedId === null) return null;
-    return this.allMapObjectsById.get(this.selectedId) ?? null;
-  }
+    get selectedPlane(): Plane | null {
+        if (this.selectedId === null) return null;
+        return this.allMapObjectsById.get(this.selectedId) ?? null;
+    }
 }

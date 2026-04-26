@@ -28,8 +28,8 @@ function toRgbalpha(
 }
 export function makeMapObjectIconLayer<T extends MapObject>(args: PropsIconLayer<T>) {
 
-  const { data, selectedId, iconAtlas, onPick, getAngle, getColor } = args;  
-  
+  const { data, selectedId, iconAtlas, onPick, getAngle, getColor } = args;
+
   return new IconLayer<T>({
     id: args.id ?? "icon-layer",
     data,
@@ -44,7 +44,7 @@ export function makeMapObjectIconLayer<T extends MapObject>(args: PropsIconLayer
       anchorY: ICON_ANCHOR,
       mask: true,
     }),
-    
+
 
     getPosition: (mapObject) => [mapObject.geoLocation.lon, mapObject.geoLocation.lat],
     getSize: (mapObject) =>
@@ -68,6 +68,6 @@ export function makeMapObjectIconLayer<T extends MapObject>(args: PropsIconLayer
       const mapObject = info.object;
       if (mapObject?.id) onPick?.(mapObject.id);
     },
-    
+
   });
 }

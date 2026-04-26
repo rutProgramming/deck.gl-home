@@ -4,8 +4,6 @@ import { MapObjectsStore } from "./mapObjectStore.store";
 import { PlaneStore } from "./PlaneStore";
 import type { StoreKey } from "../workers/workerStore/MapWorkerStore";
 import type { MapObject } from "../models/MapObject";
-
-export type ObjectType = "plane" | "car";
 class MapStore {
     planeStore = new PlaneStore();
     carStore = new MapObjectsStore<Car>();
@@ -19,7 +17,7 @@ class MapStore {
         plane: this.planeStore,
         car: this.carStore,
     };
-    
+
     private applyData(
         data: Partial<Record<StoreKey, MapObject[]>>,
         mode: "all" | "visible"
