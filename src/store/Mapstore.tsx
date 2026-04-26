@@ -1,9 +1,7 @@
 import { makeAutoObservable } from "mobx";
-import type { LayerData } from "../components/Map/IMapRenderer";
 import type { Car } from "../models/Car";
 import { MapObjectsStore } from "./mapObjectStore.store";
 import { PlaneStore } from "./PlaneStore";
-import type { MapWorkerObjectStore } from "../workers/workerStore/MapObjectWorkerStore";
 import type { StoreKey } from "../workers/workerStore/MapWorkerStore";
 import type { MapObject } from "../models/MapObject";
 
@@ -21,6 +19,7 @@ class MapStore {
         plane: this.planeStore,
         car: this.carStore,
     };
+    
     private applyData(
         data: Partial<Record<StoreKey, MapObject[]>>,
         mode: "all" | "visible"
@@ -37,20 +36,11 @@ class MapStore {
             }
         });
     }
-
     setAllData(data: Partial<Record<StoreKey, MapObject[]>>) {
       this.applyData(data,'all')
     }
     setVisibleData(data: Partial<Record<StoreKey, MapObject[]>>) {
        this.applyData(data,'visible')
-    }
-
-
-    getLayerData(): LayerData {
-        return {
-            cars: this.carStore.visibleMapObjects,
-            planes: this.planeStore.visibleMapObjects,
-        };
     }
 
 }

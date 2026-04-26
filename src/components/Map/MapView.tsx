@@ -4,7 +4,7 @@ import { MapRendererContext } from "./IMapRenderer";
 import { Box } from "@mui/material";
 import { visibleMapObjectsRecalculate } from "../../services/workerClient";
 import { mapStore } from "../../store/mapstore";
-import { buildLayers } from "./buildLayers";
+import { makeCarLayer, makePlaneLayer } from "./layerFactories";
 
 
 export function MapView() {
@@ -40,7 +40,15 @@ export function MapView() {
                 selectedId: mapStore.planeStore.selectedId,
             }),
             () => {
-                mapRenderer.renderLayers(buildLayers());
+                const layers = [
+                    makeCarLayer(mapStore.carStore.visibleMapObjects),
+                    makePlaneLayer(
+                        mapStore.planeStore.visibleMapObjects,
+                        mapStore.planeStore.selectedId,
+                        (id) => mapStore.planeStore.selectPlane(id)
+                    )
+                ]
+                mapRenderer.renderLayers(layers);
             },
             { fireImmediately: true }
         );

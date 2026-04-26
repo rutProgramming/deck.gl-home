@@ -1,9 +1,8 @@
-import type { MapObject } from "../models/MapObject"
 import type { BroadcastMessage } from "./types"
 
 export interface IBroadcastData<T> {
     // postMessageToAllPorts(broadcastMessage: BroadcastMessage): void
-    broadcastData(broadcastMessage: BroadcastMessage): void
+    broadcastData(broadcastMessage: T): void
 }
 class BroadcastData<T> implements IBroadcastData<T> {
 
@@ -14,14 +13,7 @@ class BroadcastData<T> implements IBroadcastData<T> {
             this.#ports.push(port)
         }
     }
-
-    // postMessageToAllPorts(broadcastMessage: BroadcastMessage): void {
-    //     for (const port of this.#ports) {
-    //         port.postMessage(broadcastMessage)
-    //     }
-    // }
-
-    broadcastData(broadcastMessage: BroadcastMessage): void {
+    broadcastData(broadcastMessage: T): void {
         for (const port of this.#ports) {
             port.postMessage(broadcastMessage)
         }
@@ -29,4 +21,4 @@ class BroadcastData<T> implements IBroadcastData<T> {
 
 }
 
-export const broadcastData = new BroadcastData<MapObject>()
+export const broadcastData = new BroadcastData<BroadcastMessage>()
