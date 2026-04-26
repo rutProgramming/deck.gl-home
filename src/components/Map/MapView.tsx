@@ -4,8 +4,6 @@ import { MapRendererContext } from "./IMapRenderer";
 import { Box } from "@mui/material";
 import { visibleMapObjectsRecalculate } from "../../services/workerClient";
 import { mapStore } from "../../store/mapstore";
-import type { Target } from "../../workers/types";
-import { makeCarLayer, makePlaneLayer } from "./layerFactories";
 import { buildLayers } from "./buildLayers";
 
 
@@ -13,7 +11,6 @@ export function MapView() {
     const mapContainerRef = useRef<HTMLDivElement | null>(null);
     const mapRenderer = useContext(MapRendererContext);
 
-    const targets: Target = 'all'
     const updateMapBounds = () => {
         if (!mapRenderer) return;
         const bounds = mapRenderer.getBounds();
@@ -24,12 +21,9 @@ export function MapView() {
             east: bounds.east,
             north: bounds.north,
             south: bounds.south,
-        }, targets);
+        });
 
     };
-
-   
-
 
     useEffect(() => {
         if (!mapContainerRef.current || !mapRenderer) return;

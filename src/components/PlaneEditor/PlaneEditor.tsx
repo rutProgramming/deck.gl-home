@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import SelectPlaneToEdit from "./SelectPlaneToEdit";
 import { mapStore } from "../../store/mapstore";
+import { renameMapObject } from "../../services/workerClient";
 
 export const PlaneEditor = observer(function PlaneEditor() {    
     const selectedPlane = mapStore.planeStore.selectedPlane;
@@ -26,7 +27,7 @@ export const PlaneEditor = observer(function PlaneEditor() {
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!selectedPlane) return;
-        mapStore.planeStore.renameMapObject(selectedPlane.id, editName);
+        renameMapObject(selectedPlane.id, editName,'plane')
     };
 
 

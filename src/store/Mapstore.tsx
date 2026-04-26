@@ -3,25 +3,49 @@ import type { LayerData } from "../components/Map/IMapRenderer";
 import type { Car } from "../models/Car";
 import { MapObjectsStore } from "./mapObjectStore.store";
 import { PlaneStore } from "./PlaneStore";
+import type { MapWorkerObjectStore } from "../workers/workerStore/MapObjectWorkerStore";
+import type { StoreKey } from "../workers/workerStore/MapWorkerStore";
+import type { MapObject } from "../models/MapObject";
 
 export type ObjectType = "plane" | "car";
 class MapStore {
     planeStore = new PlaneStore();
     carStore = new MapObjectsStore<Car>();
+
+
     constructor() {
         makeAutoObservable(this, {}, { autoBind: true });
     }
 
-    getStore(type: ObjectType) {
-        switch (type) {
-            case "plane":
-                return this.planeStore;
-            case "car":
-                return this.carStore;
-            default:
-                throw new Error(`Unknown object type: ${type}`);
-        }
+    stores: Record<StoreKey, MapObjectsStore<MapObject>> = {
+        plane: this.planeStore,
+        car: this.carStore,
+    };
+    private applyData(
+        data: Partial<Record<StoreKey, MapObject[]>>,
+        mode: "all" | "visible"
+    ) {
+        Object.entries(data).forEach(([key, items]) => {
+            const store = this.stores[key as StoreKey];
+
+            if (!store) return;
+
+            if (mode === "all") {
+                store.setAllMapObjects(items);
+            } else {
+                store.setVisibleMapObjects(items);
+            }
+        });
     }
+
+    setAllData(data: Partial<Record<StoreKey, MapObject[]>>) {
+      this.applyData(data,'all')
+    }
+    setVisibleData(data: Partial<Record<StoreKey, MapObject[]>>) {
+       this.applyData(data,'visible')
+    }
+
+
     getLayerData(): LayerData {
         return {
             cars: this.carStore.visibleMapObjects,

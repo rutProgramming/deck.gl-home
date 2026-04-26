@@ -1,8 +1,7 @@
 import type { MapObject } from "../models/MapObject";
+import type { StoreKey } from "./workerStore/MapWorkerStore";
 
-export type ObjectType = "car" | "plane";
 
-export type Target = "all" | ObjectType;
 
 export type BBox = {
   west: number;
@@ -14,17 +13,32 @@ export type BBox = {
 export type Message =
   | {
       type: "SET_MAP_OBJECTS";
-      data: MapObject[];
-      target: ObjectType;
+      data: Partial<Record<StoreKey, MapObject[]>>
     }
   | {
       type: "VISIBLE_MAP_OBJECTS_RECALCULATE";
       bbox: BBox;
-      target: Target;
     }
   | {
       type: "RENAME_MAP_OBJECT";
-      id: string;
-      name: string;
-      target: ObjectType; 
+      payload: {
+        id: string;
+        name: string;
+        type: StoreKey;
+      }
+    };
+
+
+export type BroadcastMessage =
+  | {
+      message: "ALL_MAP_OBJECTS";
+      data: Partial<Record<StoreKey, MapObject[]>>
+    }
+  | {
+      message: "VISIBLE_MAP_OBJECTS";
+      data: Partial<Record<StoreKey, MapObject[]>>;
+    }
+  | {
+      message: "ON_RENAME_MAP_OBJECT";
+      payload: { id: string; name: string; type: StoreKey };
     };

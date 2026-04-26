@@ -1,9 +1,9 @@
 import type { MapObject } from "../models/MapObject"
-import type { Target } from "./types"
+import type { BroadcastMessage } from "./types"
 
 export interface IBroadcastData<T> {
-    postMessageToAllPorts(target: Target, meesage: string, data: T[]): void
-    broadcastData(target: Target, data: T[], message: string): void
+    // postMessageToAllPorts(broadcastMessage: BroadcastMessage): void
+    broadcastData(broadcastMessage: BroadcastMessage): void
 }
 class BroadcastData<T> implements IBroadcastData<T> {
 
@@ -15,14 +15,16 @@ class BroadcastData<T> implements IBroadcastData<T> {
         }
     }
 
-    postMessageToAllPorts(target: Target, message: string, data: Partial<T>[]) {
-        for (const port of this.#ports) {
-            port.postMessage({ target,message, data })
-        }
-    }
+    // postMessageToAllPorts(broadcastMessage: BroadcastMessage): void {
+    //     for (const port of this.#ports) {
+    //         port.postMessage(broadcastMessage)
+    //     }
+    // }
 
-    broadcastData(target: Target, data: Partial<T>[], message: string): void {
-        this.postMessageToAllPorts(target, message, data)
+    broadcastData(broadcastMessage: BroadcastMessage): void {
+        for (const port of this.#ports) {
+            port.postMessage(broadcastMessage)
+        }
     }
 
 }

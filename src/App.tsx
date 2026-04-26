@@ -18,8 +18,10 @@ const darkTheme = createTheme({
 
 export function App() {
   useEffect(() => {
-    setMapObjects(planesData, "plane")
-    setMapObjects(carsData, "car")
+   setMapObjects({
+      plane: planesData,
+      car: carsData
+   })
   }, [])
   return (
     <ThemeProvider theme={darkTheme}>
