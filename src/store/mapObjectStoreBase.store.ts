@@ -1,7 +1,7 @@
 import { makeObservable, observable, action, computed } from "mobx";
 import type { MapObject } from "../models/MapObject";
 
-export class MapObjectsStore<T extends MapObject> {
+export class MapObjectsStoreBase<T extends MapObject> {
   allMapObjectsById = new Map<string, T>();
   visibleMapObjects: T[] = [];
 

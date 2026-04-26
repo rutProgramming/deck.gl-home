@@ -1,29 +1,10 @@
-// import { makeAutoObservable } from "mobx";
-// import { MapObjectsStore } from "./mapObjectStore.store";
-// import type { Plane } from "../models/Plane";
 
-// export class PlaneStore extends MapObjectsStore<Plane> {
-//     selectedId: string | null = null;
-
-//     constructor() {
-//         super();
-//         makeAutoObservable(this, {}, { autoBind: true });
-//     }
-
-//     selectPlane(id: string | null) {
-//         this.selectedId = id;
-//     }
-
-//     get selectedPlane(): Plane | null {
-//         return this.allMapObjectsById.get(this.selectedId!) ?? null;
-//     }
-// }
 
 import { makeObservable, observable, action, computed } from "mobx";
-import { MapObjectsStore } from "./mapObjectStore.store";
 import type { Plane } from "../models/Plane";
+import { MapObjectsStoreBase } from "./mapObjectStoreBase.store";
 
-export class PlaneStore extends MapObjectsStore<Plane> {
+export class PlaneStore extends MapObjectsStoreBase<Plane> {
     selectedId: string | null = null;
 
     constructor() {

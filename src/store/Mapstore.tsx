@@ -1,19 +1,19 @@
 import { makeAutoObservable } from "mobx";
 import type { Car } from "../models/Car";
-import { MapObjectsStore } from "./mapObjectStore.store";
 import { PlaneStore } from "./PlaneStore";
 import type { StoreKey } from "../workers/workerStore/MapWorkerStore";
 import type { MapObject } from "../models/MapObject";
+import { MapObjectsStoreBase } from "./mapObjectStoreBase.store";
 class MapStore {
     planeStore = new PlaneStore();
-    carStore = new MapObjectsStore<Car>();
+    carStore = new MapObjectsStoreBase<Car>();
 
 
     constructor() {
         makeAutoObservable(this, {}, { autoBind: true });
     }
 
-    stores: Record<StoreKey, MapObjectsStore<MapObject>> = {
+    stores: Record<StoreKey, MapObjectsStoreBase<MapObject>> = {
         plane: this.planeStore,
         car: this.carStore,
     };
