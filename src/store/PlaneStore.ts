@@ -2,7 +2,7 @@
 
 import { makeObservable, observable, action, computed } from "mobx";
 import type { Plane } from "../models/Plane";
-import { MapObjectsStoreBase } from "./mapObjectStoreBase.store";
+import { MapObjectsStoreBase } from "./mapObjectStoreBase";
 
 export class PlaneStore extends MapObjectsStoreBase<Plane> {
     selectedId: string | null = null;

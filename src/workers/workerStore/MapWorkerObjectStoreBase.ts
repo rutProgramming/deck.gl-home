@@ -1,11 +1,11 @@
 import type { MapObject } from "../../models/MapObject"
 
-export interface IMapObjectStore<T extends MapObject> {
+export interface IMapObjectStoreBase<T extends MapObject> {
     setMapObjects(data: T[]): void
     renameMapObject(id: string, name: string): void
     getMapObjectsById(): Map<string, T>
 }
-export class MapWorkerObjectStore<T extends MapObject> implements IMapObjectStore<T> {
+export class MapWorkerObjectStoreBase<T extends MapObject> implements IMapObjectStoreBase<T> {
     #mapObjectsById = new Map<string, T>()
    
     setMapObjects(mapObjects: T[]) {

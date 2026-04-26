@@ -3,7 +3,7 @@ import type { Car } from "../models/Car";
 import { PlaneStore } from "./PlaneStore";
 import type { StoreKey } from "../workers/workerStore/MapWorkerStore";
 import type { MapObject } from "../models/MapObject";
-import { MapObjectsStoreBase } from "./mapObjectStoreBase.store";
+import { MapObjectsStoreBase } from "./mapObjectStoreBase";
 class MapStore {
     planeStore = new PlaneStore();
     carStore = new MapObjectsStoreBase<Car>();

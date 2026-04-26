@@ -1,7 +1,7 @@
 import Worker from "../workers/worker.ts?sharedworker"
 import type { MapObject } from "../models/MapObject"
-import { mapStore } from "../store/mapstore"
 import type { StoreKey, WorkerMessage } from "./type"
+import { mapStore } from "../store/mapstore"
 
 type BBox = {
   west: number

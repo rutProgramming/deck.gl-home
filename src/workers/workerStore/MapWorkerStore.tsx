@@ -1,15 +1,15 @@
 import type { Car } from "../../models/Car";
 import type { MapObject } from "../../models/MapObject";
 import type { Plane } from "../../models/Plane";
-import { MapWorkerObjectStore } from "./MapObjectWorkerStore";
+import { MapWorkerObjectStoreBase } from "./MapWorkerObjectStoreBase";
 
 export type StoreKey = "plane" | "car";
 
 class MapWorkerStore {
-    planeStore = new MapWorkerObjectStore<Plane>();
-    carStore = new MapWorkerObjectStore<Car>();
+    planeStore = new MapWorkerObjectStoreBase<Plane>();
+    carStore = new MapWorkerObjectStoreBase<Car>();
 
-    stores: Record<StoreKey, MapWorkerObjectStore<MapObject>> = {
+    stores: Record<StoreKey, MapWorkerObjectStoreBase<MapObject>> = {
         plane: this.planeStore,
         car: this.carStore,
     };
