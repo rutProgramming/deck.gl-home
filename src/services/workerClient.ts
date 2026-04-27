@@ -27,13 +27,13 @@ export function visibleMapObjectsRecalculate(bbox: BBox) {
   })
 }
 
-export function renameMapObject(id: string, name: string, type: StoreKey) {
+export function renameMapObject(id: string, name: string, objectType: StoreKey) {
   worker.port.postMessage({
     type: "RENAME_MAP_OBJECT",
     payload: {
       id,
       name,
-      type
+      objectType
     },
   })
 }
@@ -50,7 +50,7 @@ worker.port.onmessage = (event: MessageEvent<WorkerMessage>) => {
   }
 
   if (msg.message === "ON_RENAME_MAP_OBJECT") {
-    mapStore.stores[msg.payload.type].renameMapObject(
+    mapStore.stores[msg.payload.objectType].renameMapObject(
       msg.payload.id,
       msg.payload.name
     );

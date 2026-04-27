@@ -33,15 +33,15 @@ export const handleMessage = (msg: Message) => {
             break;
         }
         case "RENAME_MAP_OBJECT": {
-            const { id, name, type } = msg.payload;
+            const { id, name, objectType } = msg.payload;
             
 
-            const store = mapWorkerStore.stores[type];
+            const store = mapWorkerStore.stores[objectType];
 
             store.renameMapObject(id, name);
 
             broadcastData.broadcastData({
-                payload: { id, name, type },
+                payload: { id, name, objectType },
                 message: "ON_RENAME_MAP_OBJECT"
             });
 

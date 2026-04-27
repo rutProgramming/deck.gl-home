@@ -24,7 +24,7 @@ export type Message =
       payload: {
         id: string;
         name: string;
-        type: StoreKey;
+        objectType: StoreKey;
       }
     };
 
@@ -40,5 +40,5 @@ export type BroadcastMessageMapObjects =
     }
   | {
       message: "ON_RENAME_MAP_OBJECT";
-      payload: { id: string; name: string; type: StoreKey };
+      payload: { id: string; name: string; objectType: StoreKey };
     };

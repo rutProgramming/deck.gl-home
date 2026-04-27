@@ -16,6 +16,6 @@ export type WorkerMessage =
       payload: {
         id: string;
         name: string;
-        type: StoreKey;
+        objectType: StoreKey;
       };
     };
