@@ -29,7 +29,7 @@ export type Message =
     };
 
 
-export type BroadcastMessage =
+export type BroadcastMessageMapObjects =
   | {
       message: "ALL_MAP_OBJECTS";
       data: Partial<Record<StoreKey, MapObject[]>>

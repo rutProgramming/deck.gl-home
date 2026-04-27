@@ -1,4 +1,4 @@
-import type { BroadcastMessage } from "./types"
+import type { BroadcastMessageMapObjects } from "./types"
 
 export interface IBroadcastData<T> {
     // postMessageToAllPorts(broadcastMessage: BroadcastMessage): void
@@ -18,7 +18,6 @@ class BroadcastData<T> implements IBroadcastData<T> {
             port.postMessage(broadcastMessage)
         }
     }
-
 }
 
-export const broadcastData = new BroadcastData<BroadcastMessage>()
+export const broadcastData = new BroadcastData<BroadcastMessageMapObjects>()
